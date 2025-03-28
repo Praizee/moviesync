@@ -1,7 +1,7 @@
 # MovieSync🎬
 
 ## Overview
-MovieSync is a web application that allows users to browse movies, bookmark them for later, mark them as favorites, and manage their profiles. Authentication is required for bookmarking, favoriting, and accessing detailed movie information. The app ensures persistence of user data and supports cross-device syncing.
+[MovieSync](https://moviesync-tan.vercel.app/) is a web application that allows users to browse movies, bookmark them for later, mark them as favorites, and manage their profiles. Authentication is required for bookmarking, favoriting, and accessing detailed movie information. The app ensures persistence of user data and supports cross-device syncing.
 
 ## Tech Stack
 - **Frontend Framework:** Next.js
