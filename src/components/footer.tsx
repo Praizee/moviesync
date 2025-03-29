@@ -105,8 +105,15 @@ export function Footer() {
           </p>
           <div className="flex items-center">
             <p className="text-sm text-muted-foreground text-center md:text-right">
-              This product uses the TMDB API but is not endorsed or certified by
-              TMDB.
+              This product uses the{" "}
+              <Link
+                href="https://developer.themoviedb.org/reference/intro/getting-started"
+                target="_blank"
+                className="hover:text-primary font-medium duration-150 transition-colors hover:underline"
+              >
+                TMDB API
+              </Link>{" "}
+              but is not endorsed or certified by TMDB.
             </p>
           </div>
         </div>
