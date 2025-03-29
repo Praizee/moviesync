@@ -13,7 +13,7 @@ export async function HeroSection() {
     }
 
     // Get first 10 movies
-    const featuredMovies = movies.results.slice(0, 10);
+    const featuredMovies = movies.results.slice(0, 20);
 
     return <HeroCarousel movies={featuredMovies} />;
   } catch (error) {

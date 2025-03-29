@@ -15,7 +15,7 @@ export function HeroCarousel({ movies }: { movies: any[] }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % movies.length);
-    }, 8000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [movies.length]);
 
@@ -51,17 +51,20 @@ export function HeroCarousel({ movies }: { movies: any[] }) {
   const runtime = details.runtime || 0;
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden h-[500px] md:h-[600px]">
       {/* Movie backdrop */}
       <div className="aspect-[21/9] md:aspect-[3/1] relative">
         {featuredMovie.backdrop_path ? (
           <Image
+            sizes="100vw"
             src={`https://image.tmdb.org/t/p/original${featuredMovie.backdrop_path}`}
             alt={featuredMovie.title}
-            fill
             priority
-            quality={90}
-            className="object-cover transition-opacity duration-1000 size-full min-h-[900px]"
+            quality={100}
+            fill
+            // height={900}
+            // width={1200}
+            className="object-cover object-center transition-opacity duration-1000 h-[500px] md:h-[600px] w-full"
             style={{ opacity: 1 }}
           />
         ) : (
@@ -72,7 +75,7 @@ export function HeroCarousel({ movies }: { movies: any[] }) {
 
       {/* Movie info */}
       <div className="absolute inset-0 flex flex-col justify-center p-6 md:p-12">
-        <div className="w-full max-w-screen-xl mx-auto px-4">
+        <div className="w-full max-w-screen-xl mx-auto sm:px-4">
           <div className="max-w-md">
             <h1 className="text-2xl md:text-4xl font-bold text-white mb-2 md:mb-4">
               {featuredMovie.title}
@@ -130,7 +133,10 @@ export function HeroCarousel({ movies }: { movies: any[] }) {
       </div>
 
       {/* Navigation dots */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+      <div
+        hidden
+        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2"
+      >
         {movies.map((_, index) => (
           <button
             key={index}
