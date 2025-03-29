@@ -46,12 +46,12 @@ export function Navbar() {
   };
 
   return (
-    <div className="w-full px-4 md:px-6 border-b bg-background sticky top-0 z-40">
-      <header className="w-full max-w-screen-xl mx-auto">
+    <div className="w-full border-b bg-background sticky top-0 z-40">
+      <header className="w-full max-w-screen-xl mx-auto px-4">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-2">
-              <Film className="h-6 w-6" />
+              <Film className="size-6" />
               <span className="text-xl font-bold">MovieSync</span>
             </Link>
 
@@ -127,7 +127,9 @@ export function Navbar() {
               </Button>
             </Link>
 
-            <ThemeToggle />
+            <div className="min-[350px]:block hidden">
+              <ThemeToggle />
+            </div>
 
             {session ? (
               <DropdownMenu>

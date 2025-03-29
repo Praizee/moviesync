@@ -21,7 +21,8 @@ export async function TVShowGrid({ type, page = 1 }: TVShowGridProps) {
     }
 
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 min-[250px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+        {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6"> */}
         {shows.results.map((show) => (
           <TVShowCard key={show.id} show={show} />
         ))}
