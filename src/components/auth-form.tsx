@@ -1,44 +1,58 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { useToast } from "@/hooks/use-toast"
-import { useSupabase } from "@/components/supabase-provider"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
+import { useSupabase } from "@/components/supabase-provider";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-})
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
+});
 
 const signupSchema = loginSchema
   .extend({
-    confirmPassword: z.string().min(6, { message: "Password must be at least 6 characters" }),
+    confirmPassword: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-  })
+  });
 
-type LoginFormValues = z.infer<typeof loginSchema>
-type SignupFormValues = z.infer<typeof signupSchema>
+type LoginFormValues = z.infer<typeof loginSchema>;
+type SignupFormValues = z.infer<typeof signupSchema>;
 
 interface AuthFormProps {
-  mode?: "login" | "signup"
-  callbackUrl?: string
+  mode?: "login" | "signup";
+  callbackUrl?: string;
 }
 
-export function AuthForm({ mode = "login", callbackUrl = "/dashboard" }: AuthFormProps) {
-  const { supabase } = useSupabase()
-  const router = useRouter()
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState(false)
+export function AuthForm({
+  mode = "login",
+  callbackUrl = "/dashboard",
+}: AuthFormProps) {
+  const { supabase } = useSupabase();
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<LoginFormValues | SignupFormValues>({
     resolver: zodResolver(mode === "login" ? loginSchema : signupSchema),
@@ -47,23 +61,23 @@ export function AuthForm({ mode = "login", callbackUrl = "/dashboard" }: AuthFor
       password: "",
       ...(mode === "signup" ? { confirmPassword: "" } : {}),
     },
-  })
+  });
 
   async function onSubmit(values: LoginFormValues | SignupFormValues) {
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
       if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({
           email: values.email,
           password: values.password,
-        })
+        });
 
-        if (error) throw error
+        if (error) throw error;
 
         toast.success("Welcome back!", {
           description: "You have successfully signed in.",
-        })
+        });
       } else {
         const { error } = await supabase.auth.signUp({
           email: values.email,
@@ -71,23 +85,23 @@ export function AuthForm({ mode = "login", callbackUrl = "/dashboard" }: AuthFor
           options: {
             emailRedirectTo: `${window.location.origin}/auth/callback`,
           },
-        })
+        });
 
-        if (error) throw error
+        if (error) throw error;
 
         toast.success("Account created!", {
           description: "Please check your email to verify your account.",
-        })
+        });
       }
 
-      router.refresh()
-      router.push(callbackUrl)
+      router.refresh();
+      router.push(callbackUrl);
     } catch (error: any) {
       toast.error("Authentication error", {
         description: error.message || "Something went wrong. Please try again.",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -137,7 +151,11 @@ export function AuthForm({ mode = "login", callbackUrl = "/dashboard" }: AuthFor
             />
           )}
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Loading..." : mode === "login" ? "Sign In" : "Sign Up"}
+            {isLoading
+              ? "Loading..."
+              : mode === "login"
+              ? "Sign In"
+              : "Sign Up"}
           </Button>
         </form>
       </Form>
@@ -147,12 +165,18 @@ export function AuthForm({ mode = "login", callbackUrl = "/dashboard" }: AuthFor
           <>
             <p>
               Don&apos;t have an account?{" "}
-              <Link href="/signup" className="font-medium text-primary hover:underline">
+              <Link
+                href="/signup"
+                className="font-medium text-primary hover:underline"
+              >
                 Sign up
               </Link>
             </p>
             <p className="mt-2">
-              <Link href="/reset-password" className="font-medium text-primary hover:underline">
+              <Link
+                href="/reset-password"
+                className="font-medium text-primary hover:underline"
+              >
                 Forgot your password?
               </Link>
             </p>
@@ -160,13 +184,16 @@ export function AuthForm({ mode = "login", callbackUrl = "/dashboard" }: AuthFor
         ) : (
           <p>
             Already have an account?{" "}
-            <Link href="/login" className="font-medium text-primary hover:underline">
+            <Link
+              href="/login"
+              className="font-medium text-primary hover:underline"
+            >
               Sign in
             </Link>
           </p>
         )}
       </div>
     </div>
-  )
+  );
 }
 

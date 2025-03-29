@@ -1,21 +1,23 @@
-import { TVShowCard } from "@/components/tv-show-card"
-import { getTVShows } from "@/lib/tmdb"
+import { TVShowCard } from "@/components/tv-show-card";
+import { getTVShows } from "@/lib/tmdb";
 
 interface TVShowGridProps {
-  type: "popular" | "top_rated" | "on_the_air" | "airing_today"
-  page?: number
+  type: "popular" | "top_rated" | "on_the_air" | "airing_today";
+  page?: number;
 }
 
 export async function TVShowGrid({ type, page = 1 }: TVShowGridProps) {
   try {
-    const shows = await getTVShows(type, page)
+    const shows = await getTVShows(type, page);
 
     if (!shows.results || shows.results.length === 0) {
       return (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">No TV shows available at the moment. Please try again later.</p>
+          <p className="text-muted-foreground">
+            No TV shows available at the moment. Please try again later.
+          </p>
         </div>
-      )
+      );
     }
 
     return (
@@ -24,13 +26,16 @@ export async function TVShowGrid({ type, page = 1 }: TVShowGridProps) {
           <TVShowCard key={show.id} show={show} />
         ))}
       </div>
-    )
+    );
   } catch (error) {
+    console.error("Error in TVShowGrid:", error);
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Unable to load TV shows at this time. Please try again later.</p>
+        <p className="text-muted-foreground">
+          Unable to load TV shows at this time. Please try again later.
+        </p>
       </div>
-    )
+    );
   }
 }
 

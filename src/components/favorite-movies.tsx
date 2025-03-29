@@ -1,41 +1,41 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { MovieCard } from "@/components/movie-card"
-import { TVShowCard } from "@/components/tv-show-card"
-import type { Movie, TVShow } from "@/lib/types"
-import { useSupabase } from "@/components/supabase-provider"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useEffect, useState } from "react";
+import { MovieCard } from "@/components/movie-card";
+import { TVShowCard } from "@/components/tv-show-card";
+import type { Movie, TVShow } from "@/lib/types";
+import { useSupabase } from "@/components/supabase-provider";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function FavoriteMovies() {
-  const { supabase, session } = useSupabase()
-  const [movies, setMovies] = useState<Movie[]>([])
-  const [shows, setShows] = useState<TVShow[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { supabase, session } = useSupabase();
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [shows, setShows] = useState<TVShow[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchFavorites() {
       if (!session) {
-        setIsLoading(false)
-        return
+        setIsLoading(false);
+        return;
       }
 
       try {
-        setError(null)
-        const response = await fetch("/api/user/favorites")
+        setError(null);
+        const response = await fetch("/api/user/favorites");
 
         if (!response.ok) {
-          throw new Error(`Error fetching favorites: ${response.status}`)
+          throw new Error(`Error fetching favorites: ${response.status}`);
         }
 
-        const data = await response.json()
-        console.log("Favorites data:", data)
+        const data = await response.json();
+        console.log("Favorites data:", data);
 
         if (data?.favorites) {
-          const movieItems: Movie[] = []
-          const showItems: TVShow[] = []
+          const movieItems: Movie[] = [];
+          const showItems: TVShow[] = [];
 
           data.favorites.forEach((favorite: any) => {
             if (favorite.movie_id && favorite.movie_details) {
@@ -47,7 +47,7 @@ export function FavoriteMovies() {
                 overview: favorite.movie_details.overview,
                 vote_average: favorite.movie_details.vote_average,
                 media_type: "movie",
-              })
+              });
             } else if (favorite.show_id && favorite.show_details) {
               showItems.push({
                 id: favorite.show_id,
@@ -57,22 +57,22 @@ export function FavoriteMovies() {
                 overview: favorite.show_details.overview,
                 vote_average: favorite.show_details.vote_average,
                 media_type: "tv",
-              })
+              });
             }
-          })
+          });
 
-          setMovies(movieItems)
-          setShows(showItems)
+          setMovies(movieItems);
+          setShows(showItems);
         }
       } catch (err: any) {
-        console.error("Error fetching favorites:", err)
-        setError(err.message || "Failed to load favorites")
+        console.error("Error fetching favorites:", err);
+        setError(err.message || "Failed to load favorites");
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
-    fetchFavorites()
+    fetchFavorites();
 
     // Set up a real-time subscription for favorites
     if (session) {
@@ -87,16 +87,16 @@ export function FavoriteMovies() {
             filter: `user_id=eq.${session.user.id}`,
           },
           () => {
-            fetchFavorites()
-          },
+            fetchFavorites();
+          }
         )
-        .subscribe()
+        .subscribe();
 
       return () => {
-        supabase.removeChannel(channel)
-      }
+        supabase.removeChannel(channel);
+      };
     }
-  }, [session, supabase])
+  }, [session, supabase]);
 
   if (isLoading) {
     return (
@@ -109,31 +109,37 @@ export function FavoriteMovies() {
           </div>
         ))}
       </div>
-    )
+    );
   }
 
   if (error) {
     return (
       <div className="text-center py-12">
-        <h3 className="text-xl font-medium mb-2 text-destructive">Error Loading Favorites</h3>
+        <h3 className="text-xl font-medium mb-2 text-destructive">
+          Error Loading Favorites
+        </h3>
         <p className="text-muted-foreground">{error}</p>
       </div>
-    )
+    );
   }
 
   if (movies.length === 0 && shows.length === 0) {
     return (
       <div className="text-center py-12">
         <h3 className="text-xl font-medium mb-2">No favorite items</h3>
-        <p className="text-muted-foreground">Movies and TV shows you mark as favorite will appear here.</p>
+        <p className="text-muted-foreground">
+          Movies and TV shows you mark as favorite will appear here.
+        </p>
       </div>
-    )
+    );
   }
 
   return (
     <Tabs defaultValue="all" className="w-full mt-6">
       <TabsList className="grid w-full max-w-md grid-cols-3 mb-6">
-        <TabsTrigger value="all">All ({movies.length + shows.length})</TabsTrigger>
+        <TabsTrigger value="all">
+          All ({movies.length + shows.length})
+        </TabsTrigger>
         <TabsTrigger value="movies">Movies ({movies.length})</TabsTrigger>
         <TabsTrigger value="shows">TV Shows ({shows.length})</TabsTrigger>
       </TabsList>
@@ -177,6 +183,6 @@ export function FavoriteMovies() {
         )}
       </TabsContent>
     </Tabs>
-  )
+  );
 }
 
