@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Ubuntu } from "next/font/google";
 import "./globals.css";
+import { SupabaseProvider } from "@/components/supabase-provider";
+import { ThemeProvider } from "@/components/theme-provider";
+import { SonnerProvider } from "@/components/sonner-provider";
 
-const inter = Inter({ subsets: ["latin"] });
+const ubuntu = Ubuntu({ subsets: ["latin"], weight: "400" });
 
 const APP_NAME = "MovieSync";
 const APP_DESCRIPTION =
@@ -93,12 +96,24 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>{children}</body>
+      <body className={ubuntu.className}>
+        <SupabaseProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <SonnerProvider />
+          </ThemeProvider>
+        </SupabaseProvider>
+      </body>
     </html>
   );
 }
