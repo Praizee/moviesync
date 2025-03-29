@@ -11,11 +11,11 @@ export function HeroCarousel({ movies }: { movies: any[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [movieDetails, setMovieDetails] = useState<Record<number, any>>({});
 
-  // Rotate movies every 8 seconds
+  // Rotate movies every 87seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % movies.length);
-    }, 5000);
+    }, 7000);
     return () => clearInterval(interval);
   }, [movies.length]);
 
