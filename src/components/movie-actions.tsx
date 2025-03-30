@@ -1,29 +1,29 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Bookmark, Heart } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useToast } from "@/hooks/use-toast"
-import { useSupabase } from "@/components/supabase-provider"
-import type { Movie } from "@/lib/types"
+import { useState, useEffect } from "react";
+import { Bookmark, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { useSupabase } from "@/components/supabase-provider";
+import type { Movie } from "@/lib/types";
 
 interface MovieActionsProps {
-  movieId: string
-  movieData: Movie
+  movieId: string;
+  movieData: Movie;
 }
 
 export function MovieActions({ movieId, movieData }: MovieActionsProps) {
-  const { supabase, session } = useSupabase()
-  const { toast } = useToast()
-  const [isBookmarked, setIsBookmarked] = useState(false)
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const { supabase, session } = useSupabase();
+  const { toast } = useToast();
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function checkUserActions() {
       if (!session) {
-        setIsLoading(false)
-        return
+        setIsLoading(false);
+        return;
       }
 
       try {
@@ -33,9 +33,9 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
           .select("id")
           .eq("user_id", session.user.id)
           .eq("movie_id", movieId)
-          .single()
+          .single();
 
-        setIsBookmarked(!!bookmarkData)
+        setIsBookmarked(!!bookmarkData);
 
         // Check if movie is favorited
         const { data: favoriteData } = await supabase
@@ -43,25 +43,26 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
           .select("id")
           .eq("user_id", session.user.id)
           .eq("movie_id", movieId)
-          .single()
+          .single();
 
-        setIsFavorite(!!favoriteData)
+        setIsFavorite(!!favoriteData);
       } catch (error) {
+        console.error(error);
         // Ignore errors (they'll occur if the movie isn't bookmarked/favorited)
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
-    checkUserActions()
-  }, [session, supabase, movieId])
+    checkUserActions();
+  }, [session, supabase, movieId]);
 
   const handleBookmark = async () => {
     if (!session) {
       toast.error("Sign in required", {
         description: "Please sign in to bookmark movies",
-      })
-      return
+      });
+      return;
     }
 
     try {
@@ -69,11 +70,11 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
         // Remove bookmark
         await fetch(`/api/user/bookmarks?movieId=${movieId}`, {
           method: "DELETE",
-        })
+        });
 
         toast.success("Bookmark removed", {
           description: `"${movieData.title}" has been removed from your bookmarks`,
-        })
+        });
       } else {
         // Add bookmark
         await fetch("/api/user/bookmarks", {
@@ -82,27 +83,28 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ movieId, movieData }),
-        })
+        });
 
         toast.success("Movie bookmarked", {
           description: `"${movieData.title}" has been added to your bookmarks`,
-        })
+        });
       }
 
-      setIsBookmarked(!isBookmarked)
+      setIsBookmarked(!isBookmarked);
     } catch (error) {
+      console.error(error);
       toast.error("Error", {
         description: "Failed to update bookmark",
-      })
+      });
     }
-  }
+  };
 
   const handleFavorite = async () => {
     if (!session) {
       toast.error("Sign in required", {
         description: "Please sign in to favorite movies",
-      })
-      return
+      });
+      return;
     }
 
     try {
@@ -110,11 +112,11 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
         // Remove favorite
         await fetch(`/api/user/favorites?movieId=${movieId}`, {
           method: "DELETE",
-        })
+        });
 
         toast.success("Favorite removed", {
           description: `"${movieData.title}" has been removed from your favorites`,
-        })
+        });
       } else {
         // Add favorite
         await fetch("/api/user/favorites", {
@@ -123,20 +125,21 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ movieId, movieData }),
-        })
+        });
 
         toast.success("Movie favorited", {
           description: `"${movieData.title}" has been added to your favorites`,
-        })
+        });
       }
 
-      setIsFavorite(!isFavorite)
+      setIsFavorite(!isFavorite);
     } catch (error) {
+      console.error(error);
       toast.error("Error", {
         description: "Failed to update favorite",
-      })
+      });
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -150,20 +153,28 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
           Favorite
         </Button>
       </div>
-    )
+    );
   }
 
   return (
     <div className="flex gap-2">
-      <Button variant={isBookmarked ? "default" : "outline"} onClick={handleBookmark} className="flex-1">
+      <Button
+        variant={isBookmarked ? "default" : "outline"}
+        onClick={handleBookmark}
+        className="flex-1"
+      >
         <Bookmark className="mr-2 h-4 w-4" />
         {isBookmarked ? "Bookmarked" : "Bookmark"}
       </Button>
-      <Button variant={isFavorite ? "default" : "outline"} onClick={handleFavorite} className="flex-1">
+      <Button
+        variant={isFavorite ? "default" : "outline"}
+        onClick={handleFavorite}
+        className="flex-1"
+      >
         <Heart className="mr-2 h-4 w-4" />
         {isFavorite ? "Favorited" : "Favorite"}
       </Button>
     </div>
-  )
+  );
 }
 

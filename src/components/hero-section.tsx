@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 
 export async function HeroSection() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { toast } = useToast();
   try {
     const movies = await getMovies("popular", 1);

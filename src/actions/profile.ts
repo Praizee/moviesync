@@ -88,10 +88,11 @@ export async function updateProfile(formData: FormData) {
       success: true,
       message: "Profile updated successfully",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Unexpected error in profile update:", error);
     return {
-      error: error.message || "An unexpected error occurred",
+      error:
+        error instanceof Error ? error.message : "An unexpected error occurred",
       success: false,
     };
   }

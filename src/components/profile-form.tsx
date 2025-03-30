@@ -72,6 +72,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
           const errorData = await response.json();
           errorMessage = errorData.error || errorMessage;
         } catch (parseError) {
+          console.error(parseError);
           // If JSON parsing fails, use the status text
           errorMessage = `${response.status}: ${response.statusText}`;
         }
@@ -80,7 +81,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
       }
 
       // Parse the successful response
-      const data = await response.json();
+      // const data = await response.json();
 
       toast.success("Profile updated", {
         description: "Your profile has been updated successfully.",
@@ -88,11 +89,13 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
 
       // Refresh the page to show updated data
       router.refresh();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Profile update error:", error);
       toast.error("Error", {
         description:
-          error.message || "Failed to update profile. Please try again.",
+          error instanceof Error
+            ? error.message
+            : "Failed to update profile. Please try again.",
       });
     } finally {
       setIsLoading(false);

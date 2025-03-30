@@ -150,12 +150,17 @@ export async function PUT(request: Request) {
       message: "Profile updated successfully",
       profile: updates,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in profile update:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "An unexpected error occurred";
     return NextResponse.json(
       {
-        error: error.message || "An unexpected error occurred",
-        stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
+        error: errorMessage,
+        stack:
+          error instanceof Error && process.env.NODE_ENV === "development"
+            ? error.stack
+            : undefined,
       },
       { status: 500 }
     );

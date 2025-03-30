@@ -31,12 +31,13 @@ export function BookmarkedMovies() {
         }
 
         const data = await response.json();
-        console.log("Bookmarks data:", data);
+        // console.log("Bookmarks data:", data);
 
         if (data?.bookmarks) {
           const movieItems: Movie[] = [];
           const showItems: TVShow[] = [];
 
+          // eslint-disable-next-line  @typescript-eslint/no-explicit-any
           data.bookmarks.forEach((bookmark: any) => {
             if (bookmark.movie_id && bookmark.movie_details) {
               movieItems.push({

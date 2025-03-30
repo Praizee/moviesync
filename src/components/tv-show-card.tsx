@@ -109,6 +109,7 @@ export function TVShowCard({ show }: TVShowCardProps) {
 
       setIsBookmarked(!isBookmarked);
     } catch (error) {
+      console.error(error);
       toast.error("Error", {
         description: "Failed to update bookmark",
       });
@@ -163,6 +164,7 @@ export function TVShowCard({ show }: TVShowCardProps) {
 
       setIsFavorite(!isFavorite);
     } catch (error) {
+      console.error(error);
       toast.error("Error", {
         description: "Failed to update favorite",
       });

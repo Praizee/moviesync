@@ -49,6 +49,7 @@ export async function HeroSection() {
 
       // Find director
       const directorInfo = details.credits?.crew?.find(
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         (person: any) => person.job === "Director"
       );
 
@@ -117,6 +118,7 @@ export async function HeroSection() {
             {cast.length > 0 && (
               <div className="mb-4 text-white/80 text-sm">
                 <span>Starring: </span>
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {cast.map((actor: any, index: number) => (
                   <span key={actor.id}>
                     {actor.name}
@@ -137,6 +139,7 @@ export async function HeroSection() {
       </div>
     );
   } catch (error) {
+    console.error(error);
     // Fallback UI in case of error
     return (
       <div className="relative overflow-hidden rounded-xl bg-muted">

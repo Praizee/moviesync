@@ -37,6 +37,7 @@ export function FavoriteMovies() {
           const movieItems: Movie[] = [];
           const showItems: TVShow[] = [];
 
+          // eslint-disable-next-line  @typescript-eslint/no-explicit-any
           data.favorites.forEach((favorite: any) => {
             if (favorite.movie_id && favorite.movie_details) {
               movieItems.push({

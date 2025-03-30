@@ -46,11 +46,6 @@ export function HeroCarousel({ movies }: { movies: Movie[] }) {
   const featuredMovie = movies[currentIndex];
   const details = movieDetails[featuredMovie.id] || {};
 
-  const director =
-    details.credits?.crew?.find((person: any) => person.job === "Director")
-      ?.name || "Unknown Director";
-
-  const cast = details.credits?.cast?.slice(0, 3) || [];
   const runtime = details.runtime || 0;
 
   return (
@@ -106,24 +101,7 @@ export function HeroCarousel({ movies }: { movies: Movie[] }) {
                   <span>{formatDate(featuredMovie.release_date)}</span>
                 </div>
               )}
-
-              <div className="text-white/80">
-                <span>Dir. {director}</span>
-              </div>
             </div>
-
-            {/* Cast */}
-            {cast.length > 0 && (
-              <div className="mb-4 text-white/80 text-sm">
-                <span>Starring: </span>
-                {cast.map((actor: any, index: number) => (
-                  <span key={actor.id}>
-                    {actor.name}
-                    {index < cast.length - 1 ? ", " : ""}
-                  </span>
-                ))}
-              </div>
-            )}
 
             <p className="text-sm md:text-base text-white/80 line-clamp-3 mb-4 md:mb-6">
               {featuredMovie.overview}

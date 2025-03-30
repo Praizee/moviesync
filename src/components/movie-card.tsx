@@ -1,33 +1,33 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import Link from "next/link"
-import Image from "next/image"
-import { Bookmark, Heart, Star } from "lucide-react"
-import type { Movie } from "@/lib/types"
-import { formatDate } from "@/lib/utils"
-import { useSupabase } from "@/components/supabase-provider"
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { useToast } from "@/hooks/use-toast"
+import Link from "next/link";
+import Image from "next/image";
+import { Bookmark, Heart, Star } from "lucide-react";
+import type { Movie } from "@/lib/types";
+import { formatDate } from "@/lib/utils";
+import { useSupabase } from "@/components/supabase-provider";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface MovieCardProps {
-  movie: Movie
+  movie: Movie;
 }
 
 export function MovieCard({ movie }: MovieCardProps) {
-  const { supabase, session } = useSupabase()
-  const { toast } = useToast()
-  const [isBookmarked, setIsBookmarked] = useState(false)
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const { supabase, session } = useSupabase();
+  const { toast } = useToast();
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function checkUserActions() {
       if (!session) {
-        setIsLoading(false)
-        return
+        setIsLoading(false);
+        return;
       }
 
       try {
@@ -37,9 +37,9 @@ export function MovieCard({ movie }: MovieCardProps) {
           .select("id")
           .eq("user_id", session.user.id)
           .eq("movie_id", movie.id)
-          .single()
+          .single();
 
-        setIsBookmarked(!!bookmarkData)
+        setIsBookmarked(!!bookmarkData);
 
         // Check if movie is favorited
         const { data: favoriteData } = await supabase
@@ -47,28 +47,29 @@ export function MovieCard({ movie }: MovieCardProps) {
           .select("id")
           .eq("user_id", session.user.id)
           .eq("movie_id", movie.id)
-          .single()
+          .single();
 
-        setIsFavorite(!!favoriteData)
+        setIsFavorite(!!favoriteData);
       } catch (error) {
+        console.error(error);
         // Ignore errors (they'll occur if the movie isn't bookmarked/favorited)
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
-    checkUserActions()
-  }, [session, supabase, movie.id])
+    checkUserActions();
+  }, [session, supabase, movie.id]);
 
   const handleBookmark = async (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
 
     if (!session) {
       toast.error("Sign in required", {
         description: "Please sign in to bookmark movies",
-      })
-      return
+      });
+      return;
     }
 
     try {
@@ -76,11 +77,11 @@ export function MovieCard({ movie }: MovieCardProps) {
         // Remove bookmark
         await fetch(`/api/user/bookmarks?movieId=${movie.id}`, {
           method: "DELETE",
-        })
+        });
 
         toast.success("Bookmark removed", {
           description: `"${movie.title}" has been removed from your bookmarks`,
-        })
+        });
       } else {
         // Add bookmark
         await fetch("/api/user/bookmarks", {
@@ -95,30 +96,31 @@ export function MovieCard({ movie }: MovieCardProps) {
               media_type: "movie",
             },
           }),
-        })
+        });
 
         toast.success("Movie bookmarked", {
           description: `"${movie.title}" has been added to your bookmarks`,
-        })
+        });
       }
 
-      setIsBookmarked(!isBookmarked)
+      setIsBookmarked(!isBookmarked);
     } catch (error) {
+      console.error(error);
       toast.error("Error", {
         description: "Failed to update bookmark",
-      })
+      });
     }
-  }
+  };
 
   const handleFavorite = async (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
 
     if (!session) {
       toast.error("Sign in required", {
         description: "Please sign in to favorite movies",
-      })
-      return
+      });
+      return;
     }
 
     try {
@@ -126,11 +128,11 @@ export function MovieCard({ movie }: MovieCardProps) {
         // Remove favorite
         await fetch(`/api/user/favorites?movieId=${movie.id}`, {
           method: "DELETE",
-        })
+        });
 
         toast.success("Favorite removed", {
           description: `"${movie.title}" has been removed from your favorites`,
-        })
+        });
       } else {
         // Add favorite
         await fetch("/api/user/favorites", {
@@ -145,20 +147,21 @@ export function MovieCard({ movie }: MovieCardProps) {
               media_type: "movie",
             },
           }),
-        })
+        });
 
         toast.success("Movie favorited", {
           description: `"${movie.title}" has been added to your favorites`,
-        })
+        });
       }
 
-      setIsFavorite(!isFavorite)
+      setIsFavorite(!isFavorite);
     } catch (error) {
+      console.error(error);
       toast.error("Error", {
         description: "Failed to update favorite",
-      })
+      });
     }
-  }
+  };
 
   return (
     <Link href={`/movies/${movie.id}`} className="group relative">
@@ -195,7 +198,11 @@ export function MovieCard({ movie }: MovieCardProps) {
               onClick={handleBookmark}
               disabled={isLoading}
             >
-              <Bookmark className={`h-4 w-4 ${isBookmarked ? "fill-primary text-primary" : "text-white"}`} />
+              <Bookmark
+                className={`h-4 w-4 ${
+                  isBookmarked ? "fill-primary text-primary" : "text-white"
+                }`}
+              />
               <span className="sr-only">Bookmark</span>
             </Button>
             <Button
@@ -205,17 +212,25 @@ export function MovieCard({ movie }: MovieCardProps) {
               onClick={handleFavorite}
               disabled={isLoading}
             >
-              <Heart className={`h-4 w-4 ${isFavorite ? "fill-primary text-primary" : "text-white"}`} />
+              <Heart
+                className={`h-4 w-4 ${
+                  isFavorite ? "fill-primary text-primary" : "text-white"
+                }`}
+              />
               <span className="sr-only">Favorite</span>
             </Button>
           </div>
         </div>
       </div>
       <div className="mt-2">
-        <h3 className="font-medium line-clamp-1 group-hover:text-primary transition-colors">{movie.title}</h3>
-        <p className="text-sm text-muted-foreground">{movie.release_date ? formatDate(movie.release_date) : "TBA"}</p>
+        <h3 className="font-medium line-clamp-1 group-hover:text-primary transition-colors">
+          {movie.title}
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          {movie.release_date ? formatDate(movie.release_date) : "TBA"}
+        </p>
       </div>
     </Link>
-  )
+  );
 }
 
