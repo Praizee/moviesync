@@ -48,7 +48,8 @@ export function Navbar() {
   return (
     <div className="w-full border-b bg-background sticky top-0 z-40">
       <header className="w-full max-w-screen-xl mx-auto px-4">
-        <div className="container flex h-16 items-center justify-between">
+        <div className="mx-auto flex h-16 items-center justify-between">
+          {/* removed 'container' from above... (don't like the 'jump') */}
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-2">
               <Film className="size-6" />
