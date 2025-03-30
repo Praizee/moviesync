@@ -67,7 +67,7 @@ export function HeroCarousel({ movies }: { movies: Movie[] }) {
             fill
             // height={900}
             // width={1200}
-            className="object-cover object-center transition-opacity duration-1000 min-h-[500px] md:h-[600px] w-full"
+            className="object-cover object-center transition-opacity duration-1000 min-h-[500px] md:min-h-[600px] w-full"
             style={{ opacity: 1 }}
           />
         ) : (
