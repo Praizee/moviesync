@@ -5,6 +5,7 @@ import { SupabaseProvider } from "@/components/supabase-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SonnerProvider } from "@/components/sonner-provider";
 import NextTopLoader from "nextjs-toploader";
+import BackToTopButton from "@/components/back-to-top";
 
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: "400" });
 
@@ -125,7 +126,7 @@ export default function RootLayout({
               zIndex={1600}
               showAtBottom={false}
             />
-
+            <BackToTopButton />
             {children}
             <SonnerProvider />
           </ThemeProvider>
