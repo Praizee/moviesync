@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSupabase } from "@/components/supabase-provider";
+import { useRouter } from "next/navigation";
 
 const profileSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -36,7 +36,7 @@ interface ProfileFormProps {
 
 export function ProfileForm({ initialData }: ProfileFormProps) {
   const { toast } = useToast();
-  const { supabase } = useSupabase();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<ProfileFormValues>({
@@ -51,23 +51,48 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
     setIsLoading(true);
 
     try {
-      // Update directly with Supabase client
-      const { error } = await supabase.from("profiles").upsert({
-        id: initialData.id,
-        name: values.name,
-        avatar_url: values.avatar_url,
-        updated_at: new Date().toISOString(),
+      // Use the API route with admin privileges
+      const response = await fetch("/api/user/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: values.name,
+          avatar_url: values.avatar_url || "",
+        }),
       });
 
-      if (error) throw error;
+      // Check if the response is ok before trying to parse JSON
+      if (!response.ok) {
+        let errorMessage = `Server returned ${response.status}`;
+
+        try {
+          // Try to parse error details if available
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (parseError) {
+          // If JSON parsing fails, use the status text
+          errorMessage = `${response.status}: ${response.statusText}`;
+        }
+
+        throw new Error(errorMessage);
+      }
+
+      // Parse the successful response
+      const data = await response.json();
 
       toast.success("Profile updated", {
         description: "Your profile has been updated successfully.",
       });
-    } catch (error: unknown) {
+
+      // Refresh the page to show updated data
+      router.refresh();
+    } catch (error: any) {
       console.error("Profile update error:", error);
       toast.error("Error", {
-        description: "Failed to update profile. Please try again.",
+        description:
+          error.message || "Failed to update profile. Please try again.",
       });
     } finally {
       setIsLoading(false);
