@@ -48,18 +48,19 @@ export function Navbar() {
   return (
     <div className="w-full border-b bg-background sticky top-0 z-40">
       <header className="w-full max-w-screen-xl mx-auto px-4">
-        <div className="mx-auto flex h-16 items-center justify-between">
+        <div className="mx-auto flex h-16 items-center justify-between w-full">
           {/* removed 'container' from above... (don't like the 'jump') */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 w-full">
             <Link href="/" className="flex items-center gap-2">
               <Film className="size-6" />
               <span className="text-xl font-bold">MovieSync</span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-6">
+            <nav className="hidden md:flex items-center gap-6 w-full pl-8">
+              {/* justify-center above, prolly later...depends */}
               <Link
                 href="/"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`font-medium transition-colors hover:text-primary ${
                   isActive("/") ? "text-primary" : "text-muted-foreground"
                 }`}
               >
@@ -67,7 +68,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/trending"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`font-medium transition-colors hover:text-primary ${
                   isActive("/trending")
                     ? "text-primary"
                     : "text-muted-foreground"
@@ -77,7 +78,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/popular"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`font-medium transition-colors hover:text-primary ${
                   isActive("/popular")
                     ? "text-primary"
                     : "text-muted-foreground"
@@ -87,7 +88,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/top-rated"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`font-medium transition-colors hover:text-primary ${
                   isActive("/top-rated")
                     ? "text-primary"
                     : "text-muted-foreground"
@@ -97,7 +98,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/search"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`font-medium transition-colors hover:text-primary ${
                   isActive("/search") ? "text-primary" : "text-muted-foreground"
                 }`}
               >
@@ -107,7 +108,7 @@ export function Navbar() {
                 <>
                   <Link
                     href="/bookmarks"
-                    className={`text-sm font-medium transition-colors hover:text-primary ${
+                    className={`font-medium transition-colors hover:text-primary ${
                       // pathname.startsWith("/bookmarks")
                       isActive("/bookmarks")
                         ? "text-primary"
@@ -119,7 +120,7 @@ export function Navbar() {
 
                   <Link
                     href="/favorites"
-                    className={`text-sm font-medium transition-colors hover:text-primary ${
+                    className={`font-medium transition-colors hover:text-primary ${
                       isActive("/favorites")
                         ? "text-primary"
                         : "text-muted-foreground"

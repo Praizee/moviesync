@@ -88,7 +88,7 @@ export function MovieTrailer({ videos }: MovieTrailerProps) {
             <ChevronLeft className="h-4 w-4" />
             <span className="sr-only">Previous trailer</span>
           </Button>
-          <div className="flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-2">
             {filteredVideos.map((_, index) => (
               <button
                 key={index}

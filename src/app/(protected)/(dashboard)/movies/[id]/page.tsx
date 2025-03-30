@@ -40,7 +40,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="md:col-span-1">
+          <div className="md:col-span-1 flex flex-col gap-4">
             <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg">
               {movie.poster_path ? (
                 <Image
@@ -50,6 +50,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 33vw"
                   priority
+                  quality={90}
                 />
               ) : (
                 <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -59,7 +60,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
                 </div>
               )}
             </div>
-            <div className="mt-4">
+            <div className="">
               <MovieActions movieId={params.id} movieData={movie} />
             </div>
           </div>

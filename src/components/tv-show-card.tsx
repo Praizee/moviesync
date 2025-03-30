@@ -182,6 +182,8 @@ export function TVShowCard({ show }: TVShowCardProps) {
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              quality={90}
+              priority
             />
           ) : (
             <div className="flex h-full items-center justify-center">
