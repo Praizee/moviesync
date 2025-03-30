@@ -6,10 +6,13 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Star, Clock, Calendar } from "lucide-react";
 import { formatDate, formatRuntime } from "@/lib/utils";
+import { Movie, MovieDetails } from "@/lib/types";
 
-export function HeroCarousel({ movies }: { movies: any[] }) {
+export function HeroCarousel({ movies }: { movies: Movie[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [movieDetails, setMovieDetails] = useState<Record<number, any>>({});
+  const [movieDetails, setMovieDetails] = useState<
+    Record<number, MovieDetails>
+  >({});
 
   // Rotate movies every 87seconds
   useEffect(() => {
@@ -64,13 +67,13 @@ export function HeroCarousel({ movies }: { movies: any[] }) {
             fill
             // height={900}
             // width={1200}
-            className="object-cover object-center transition-opacity duration-1000 h-[500px] md:h-[600px] w-full"
+            className="object-cover object-center transition-opacity duration-1000 min-h-[500px] md:h-[600px] w-full"
             style={{ opacity: 1 }}
           />
         ) : (
           <div className="w-full h-full bg-muted" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30 min-h-[500px] md:h-[600px]" />
       </div>
 
       {/* Movie info */}
