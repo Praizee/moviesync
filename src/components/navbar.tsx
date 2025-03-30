@@ -105,14 +105,26 @@ export function Navbar() {
               {session && (
                 <>
                   <Link
-                    href="/dashboard"
+                    href="/bookmarks"
                     className={`text-sm font-medium transition-colors hover:text-primary ${
-                      pathname.startsWith("/dashboard")
+                      // pathname.startsWith("/bookmarks")
+                      isActive("/bookmarks")
                         ? "text-primary"
                         : "text-muted-foreground"
                     }`}
                   >
-                    Dashboard
+                    Bookmarks
+                  </Link>
+
+                  <Link
+                    href="/favorites"
+                    className={`text-sm font-medium transition-colors hover:text-primary ${
+                      isActive("/favorites")
+                        ? "text-primary"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+                    Favorites
                   </Link>
                 </>
               )}
@@ -172,7 +184,16 @@ export function Navbar() {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link
-                      href="/dashboard/bookmarks"
+                      href="/library"
+                      className="cursor-pointer w-full flex items-center"
+                    >
+                      <Bookmark className="mr-2 h-4 w-4" />
+                      <span>Library</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/bookmarks"
                       className="cursor-pointer w-full flex items-center"
                     >
                       <Bookmark className="mr-2 h-4 w-4" />
@@ -181,7 +202,7 @@ export function Navbar() {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link
-                      href="/dashboard/favorites"
+                      href="/favorites"
                       className="cursor-pointer w-full flex items-center"
                     >
                       <Heart className="mr-2 h-4 w-4" />

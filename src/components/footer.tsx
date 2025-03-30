@@ -51,26 +51,26 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/login"
+                  href="/bookmarks"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Sign In
+                  Bookmarks
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/signup"
+                  href="/favorites"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Sign Up
+                  Favorites
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard"
+                  href="/library"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Dashboard
+                  Library
                 </Link>
               </li>
             </ul>

@@ -43,6 +43,7 @@ export function FavoriteMovies() {
                 id: favorite.movie_id,
                 title: favorite.movie_details.title,
                 poster_path: favorite.movie_details.poster_path,
+                backdrop_path: favorite.movie_details.backdrop_path || null,
                 release_date: favorite.movie_details.release_date,
                 overview: favorite.movie_details.overview,
                 vote_average: favorite.movie_details.vote_average,
@@ -53,6 +54,7 @@ export function FavoriteMovies() {
                 id: favorite.show_id,
                 name: favorite.show_details.name,
                 poster_path: favorite.show_details.poster_path,
+                backdrop_path: favorite.show_details.backdrop_path || null,
                 first_air_date: favorite.show_details.first_air_date,
                 overview: favorite.show_details.overview,
                 vote_average: favorite.show_details.vote_average,
@@ -64,9 +66,11 @@ export function FavoriteMovies() {
           setMovies(movieItems);
           setShows(showItems);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error fetching favorites:", err);
-        setError(err.message || "Failed to load favorites");
+        setError(
+          err instanceof Error ? err.message : "Failed to load favorites"
+        );
       } finally {
         setIsLoading(false);
       }

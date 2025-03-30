@@ -1,15 +1,15 @@
-import { NextResponse } from "next/server"
-import { createServerClient } from "@/lib/supabase-server"
+import { NextResponse } from "next/server";
+import { createServerClient } from "@/lib/supabase-server";
 
 export async function GET() {
-  const supabase = createServerClient()
+  const supabase = await createServerClient();
 
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession();
 
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
@@ -18,18 +18,18 @@ export async function GET() {
       .from("favorites")
       .select("*, movie_id(*)")
       .eq("user_id", session.user.id)
-      .is("show_id", null)
+      .is("show_id", null);
 
-    if (movieError) throw movieError
+    if (movieError) throw movieError;
 
     // Get TV show favorites
     const { data: showFavorites, error: showError } = await supabase
       .from("favorites")
       .select("*, show_id(*)")
       .eq("user_id", session.user.id)
-      .is("movie_id", null)
+      .is("movie_id", null);
 
-    if (showError) throw showError
+    if (showError) throw showError;
 
     // Format the response
     const formattedFavorites = [
@@ -47,39 +47,48 @@ export async function GET() {
         show_details: favorite.show_id,
         created_at: favorite.created_at,
       })),
-    ]
+    ];
 
-    return NextResponse.json({ favorites: formattedFavorites })
-  } catch (error: any) {
-    console.error("Error fetching favorites:", error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ favorites: formattedFavorites });
+  } catch (error: unknown) {
+    console.error("Error fetching favorites:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
-  const supabase = createServerClient()
+  const supabase = await createServerClient();
 
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession();
 
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const body = await request.json()
-    const { movieId, movieData, showId, showData } = body
+    const body = await request.json();
+    const { movieId, movieData, showId, showData } = body;
 
-    console.log("Favorite request:", { movieId, showId })
+    console.log("Favorite request:", { movieId, showId });
 
     if (!movieId && !showId) {
-      return NextResponse.json({ error: "Movie ID or Show ID is required" }, { status: 400 })
+      return NextResponse.json(
+        { error: "Movie ID or Show ID is required" },
+        { status: 400 }
+      );
     }
 
     if (movieId) {
       // First, check if the movie exists in the movies table
-      const { data: existingMovie } = await supabase.from("movies").select("id").eq("id", movieId).single()
+      const { data: existingMovie } = await supabase
+        .from("movies")
+        .select("id")
+        .eq("id", movieId)
+        .single();
 
       // If the movie doesn't exist, insert it
       if (!existingMovie && movieData) {
@@ -91,9 +100,9 @@ export async function POST(request: Request) {
           overview: movieData.overview,
           vote_average: movieData.vote_average,
           media_type: "movie",
-        })
+        });
 
-        if (insertError) throw insertError
+        if (insertError) throw insertError;
       }
 
       // Check if the favorite already exists
@@ -102,24 +111,30 @@ export async function POST(request: Request) {
         .select("id")
         .eq("user_id", session.user.id)
         .eq("movie_id", movieId)
-        .single()
+        .single();
 
       if (existingFavorite) {
-        return NextResponse.json({ message: "Movie already in favorites" })
+        return NextResponse.json({ message: "Movie already in favorites" });
       }
 
       // Add the favorite
       const { error } = await supabase.from("favorites").insert({
         user_id: session.user.id,
         movie_id: movieId,
-      })
+      });
 
-      if (error) throw error
+      if (error) throw error;
 
-      return NextResponse.json({ message: "Movie added to favorites successfully" })
+      return NextResponse.json({
+        message: "Movie added to favorites successfully",
+      });
     } else if (showId) {
       // First, check if the show exists in the shows table
-      const { data: existingShow } = await supabase.from("shows").select("id").eq("id", showId).single()
+      const { data: existingShow } = await supabase
+        .from("shows")
+        .select("id")
+        .eq("id", showId)
+        .single();
 
       // If the show doesn't exist, insert it
       if (!existingShow && showData) {
@@ -131,9 +146,9 @@ export async function POST(request: Request) {
           overview: showData.overview,
           vote_average: showData.vote_average,
           media_type: "tv",
-        })
+        });
 
-        if (insertError) throw insertError
+        if (insertError) throw insertError;
       }
 
       // Check if the favorite already exists
@@ -142,70 +157,87 @@ export async function POST(request: Request) {
         .select("id")
         .eq("user_id", session.user.id)
         .eq("show_id", showId)
-        .single()
+        .single();
 
       if (existingFavorite) {
-        return NextResponse.json({ message: "Show already in favorites" })
+        return NextResponse.json({ message: "Show already in favorites" });
       }
 
       // Add the favorite
       const { error } = await supabase.from("favorites").insert({
         user_id: session.user.id,
         show_id: showId,
-      })
+      });
 
-      if (error) throw error
+      if (error) throw error;
 
-      return NextResponse.json({ message: "Show added to favorites successfully" })
+      return NextResponse.json({
+        message: "Show added to favorites successfully",
+      });
     }
 
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 })
-  } catch (error: any) {
-    console.error("Error creating favorite:", error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  } catch (error: unknown) {
+    console.error("Error creating favorite:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
 
 export async function DELETE(request: Request) {
-  const supabase = createServerClient()
+  const supabase = await createServerClient();
 
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession();
 
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const { searchParams } = new URL(request.url)
-    const movieId = searchParams.get("movieId")
-    const showId = searchParams.get("showId")
+    const { searchParams } = new URL(request.url);
+    const movieId = searchParams.get("movieId");
+    const showId = searchParams.get("showId");
 
-    console.log("Delete favorite request:", { movieId, showId })
+    console.log("Delete favorite request:", { movieId, showId });
 
     if (!movieId && !showId) {
-      return NextResponse.json({ error: "Movie ID or Show ID is required" }, { status: 400 })
+      return NextResponse.json(
+        { error: "Movie ID or Show ID is required" },
+        { status: 400 }
+      );
     }
 
     if (movieId) {
-      const { error } = await supabase.from("favorites").delete().eq("user_id", session.user.id).eq("movie_id", movieId)
+      const { error } = await supabase
+        .from("favorites")
+        .delete()
+        .eq("user_id", session.user.id)
+        .eq("movie_id", movieId);
 
-      if (error) throw error
+      if (error) throw error;
 
-      return NextResponse.json({ message: "Favorite removed successfully" })
+      return NextResponse.json({ message: "Favorite removed successfully" });
     } else if (showId) {
-      const { error } = await supabase.from("favorites").delete().eq("user_id", session.user.id).eq("show_id", showId)
+      const { error } = await supabase
+        .from("favorites")
+        .delete()
+        .eq("user_id", session.user.id)
+        .eq("show_id", showId);
 
-      if (error) throw error
+      if (error) throw error;
 
-      return NextResponse.json({ message: "Favorite removed successfully" })
+      return NextResponse.json({ message: "Favorite removed successfully" });
     }
 
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 })
-  } catch (error: any) {
-    console.error("Error deleting favorite:", error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  } catch (error: unknown) {
+    console.error("Error deleting favorite:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
 

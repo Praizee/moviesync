@@ -10,9 +10,16 @@ export default async function BookmarksPage() {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    redirect("/login?callbackUrl=/dashboard/bookmarks");
+    redirect("/login?callbackUrl=/bookmarks");
   }
 
-  return <BookmarkedMovies />;
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-6">
+        Your Bookmarks
+      </h1>
+      <BookmarkedMovies />
+    </div>
+  );
 }
 

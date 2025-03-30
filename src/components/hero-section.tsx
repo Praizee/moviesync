@@ -2,8 +2,10 @@ import { getMovies } from "@/lib/tmdb";
 import { HeroCarousel } from "./hero-carousel";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
 
 export async function HeroSection() {
+  const { toast } = useToast();
   try {
     const movies = await getMovies("popular", 1);
 
@@ -12,11 +14,17 @@ export async function HeroSection() {
       return <DefaultHero />;
     }
 
-    // Get first 10 movies
+    // Get first 20 movies
     const featuredMovies = movies.results.slice(0, 20);
 
     return <HeroCarousel movies={featuredMovies} />;
-  } catch (error) {
+  } catch (error: unknown) {
+    toast.error("Error", {
+      description:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+    });
     return <DefaultHero />;
   }
 }

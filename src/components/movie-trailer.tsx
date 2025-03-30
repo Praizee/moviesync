@@ -1,42 +1,49 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { ChevronLeft, ChevronRight, Play } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import { ChevronLeft, ChevronRight, Play } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface Video {
-  id: string
-  key: string
-  name: string
-  site: string
-  type: string
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
 }
 
 interface MovieTrailerProps {
-  videos: Video[]
+  videos: Video[];
 }
 
 export function MovieTrailer({ videos }: MovieTrailerProps) {
-  const [activeVideo, setActiveVideo] = useState(0)
+  const [activeVideo, setActiveVideo] = useState(0);
 
   // Filter for YouTube trailers and teasers
   const filteredVideos = videos.filter(
-    (video) => video.site === "YouTube" && (video.type === "Trailer" || video.type === "Teaser"),
-  )
+    (video) =>
+      video.site === "YouTube" &&
+      (video.type === "Trailer" || video.type === "Teaser")
+  );
 
   if (filteredVideos.length === 0) {
-    return <p className="text-muted-foreground">No trailers available</p>
+    return <p className="text-muted-foreground">No trailers available</p>;
   }
 
   const handlePrevious = () => {
-    setActiveVideo((prev) => (prev === 0 ? filteredVideos.length - 1 : prev - 1))
-  }
+    setActiveVideo((prev) =>
+      prev === 0 ? filteredVideos.length - 1 : prev - 1
+    );
+  };
 
   const handleNext = () => {
-    setActiveVideo((prev) => (prev === filteredVideos.length - 1 ? 0 : prev + 1))
-  }
+    setActiveVideo((prev) =>
+      prev === filteredVideos.length - 1 ? 0 : prev + 1
+    );
+  };
 
   return (
     <div className="space-y-4">
@@ -65,10 +72,13 @@ export function MovieTrailer({ videos }: MovieTrailerProps) {
             </div>
           </DialogContent>
         </Dialog>
-        <img
+        <Image
           src={`https://img.youtube.com/vi/${filteredVideos[activeVideo].key}/maxresdefault.jpg`}
           alt={filteredVideos[activeVideo].name}
           className="h-full w-full object-cover"
+          quality={90}
+          priority
+          fill
         />
       </div>
 
@@ -82,7 +92,12 @@ export function MovieTrailer({ videos }: MovieTrailerProps) {
             {filteredVideos.map((_, index) => (
               <button
                 key={index}
-                className={cn("h-2 w-2 rounded-full", index === activeVideo ? "bg-primary" : "bg-muted-foreground/30")}
+                className={cn(
+                  "h-2 w-2 rounded-full",
+                  index === activeVideo
+                    ? "bg-primary"
+                    : "bg-muted-foreground/30"
+                )}
                 onClick={() => setActiveVideo(index)}
               >
                 <span className="sr-only">Trailer {index + 1}</span>
@@ -96,6 +111,6 @@ export function MovieTrailer({ videos }: MovieTrailerProps) {
         </div>
       )}
     </div>
-  )
+  );
 }
 

@@ -1,5 +1,5 @@
+// import { DashboardTabs } from "@/components/dashboard-tabs";
 import { Footer } from "@/components/footer";
-import { Navbar } from "@/components/navbar";
 
 export default function DashboardLayout({
   children,
@@ -7,9 +7,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-[50dvh] flex flex-col">
-      <Navbar />
-      <div className="max-w-screen-xl mx-auto w-full min-h-[50dvh]">
+    <div className="min-h-[80dvh] flex flex-col">
+      <div className="space-y-4">
+        {/* <DashboardTabs /> */}
         {children}
       </div>
       <Footer />

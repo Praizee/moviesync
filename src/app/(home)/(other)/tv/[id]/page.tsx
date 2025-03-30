@@ -1,37 +1,41 @@
-import type { Metadata } from "next"
-import Image from "next/image"
-import Link from "next/link"
-import { getTVShowDetails } from "@/lib/tmdb"
-import { MovieTrailer } from "@/components/movie-trailer"
-import { AuthCheck } from "@/components/auth-check"
-import { formatDate } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Star } from "lucide-react"
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { getTVShowDetails } from "@/lib/tmdb";
+import { MovieTrailer } from "@/components/movie-trailer";
+import { AuthCheck } from "@/components/auth-check";
+import { formatDate } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
 
 interface TVShowPageProps {
   params: {
-    id: string
-  }
+    id: string;
+  };
 }
 
-export async function generateMetadata({ params }: TVShowPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: TVShowPageProps): Promise<Metadata> {
   try {
-    const show = await getTVShowDetails(params.id)
+    const show = await getTVShowDetails(params.id);
     return {
       title: `${show.name} - MovieSync`,
       description: show.overview,
-    }
+    };
   } catch (error) {
+    console.error("Error fetching show details:", error);
+
     return {
       title: "TV Show - MovieSync",
       description: "View TV show details",
-    }
+    };
   }
 }
 
 export default async function TVShowPage({ params }: TVShowPageProps) {
   try {
-    const show = await getTVShowDetails(params.id)
+    const show = await getTVShowDetails(params.id);
 
     return (
       <div className="container mx-auto px-4 py-8">
@@ -49,7 +53,9 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
                 />
               ) : (
                 <div className="w-full h-full bg-muted flex items-center justify-center">
-                  <span className="text-muted-foreground">No poster available</span>
+                  <span className="text-muted-foreground">
+                    No poster available
+                  </span>
                 </div>
               )}
             </div>
@@ -57,8 +63,12 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
               {show.vote_average !== undefined && (
                 <div className="flex items-center">
                   <Star className="h-5 w-5 mr-1 text-yellow-400 fill-yellow-400" />
-                  <span className="font-medium">{show.vote_average.toFixed(1)}</span>
-                  <span className="text-muted-foreground ml-1">({show.vote_count} votes)</span>
+                  <span className="font-medium">
+                    {show.vote_average.toFixed(1)}
+                  </span>
+                  <span className="text-muted-foreground ml-1">
+                    ({show.vote_count} votes)
+                  </span>
                 </div>
               )}
             </div>
@@ -66,12 +76,19 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
 
           <div className="md:col-span-2">
             <h1 className="text-4xl font-bold mb-2">{show.name}</h1>
-            {show.tagline && <p className="text-xl text-muted-foreground italic mb-4">{show.tagline}</p>}
+            {show.tagline && (
+              <p className="text-xl text-muted-foreground italic mb-4">
+                {show.tagline}
+              </p>
+            )}
 
             <div className="flex flex-wrap gap-2 mb-6">
               {show.genres &&
                 show.genres.map((genre) => (
-                  <span key={genre.id} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
+                  <span
+                    key={genre.id}
+                    className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                  >
                     {genre.name}
                   </span>
                 ))}
@@ -104,8 +121,8 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
               fallback={
                 <div className="p-4 border border-amber-200 bg-amber-50 dark:bg-amber-950 dark:border-amber-900 rounded-lg mb-6">
                   <p className="text-amber-800 dark:text-amber-200">
-                    <span className="font-semibold">Sign in required.</span> Please log in to view full TV show details
-                    and trailer.
+                    <span className="font-semibold">Sign in required.</span>{" "}
+                    Please log in to view full TV show details and trailer.
                   </p>
                 </div>
               }
@@ -139,12 +156,16 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
                               />
                             ) : (
                               <div className="w-full h-full bg-muted flex items-center justify-center">
-                                <span className="text-muted-foreground text-xs">No image</span>
+                                <span className="text-muted-foreground text-xs">
+                                  No image
+                                </span>
                               </div>
                             )}
                           </div>
                           <p className="font-medium text-sm">{person.name}</p>
-                          <p className="text-xs text-muted-foreground">{person.character}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {person.character}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -155,19 +176,24 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
           </div>
         </div>
       </div>
-    )
+    );
   } catch (error) {
+    console.error(error);
+
     return (
       <div className="container mx-auto px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold mb-4">Unable to load TV show details</h1>
+        <h1 className="text-2xl font-bold mb-4">
+          Unable to load TV show details
+        </h1>
         <p className="text-muted-foreground mb-8">
-          We're having trouble loading this TV show's information. This could be due to a temporary issue.
+          We&apos;re having trouble loading this TV show&apos;s information.
+          This could be due to a temporary issue.
         </p>
         <Button asChild>
           <Link href="/">Return to Home</Link>
         </Button>
       </div>
-    )
+    );
   }
 }
 

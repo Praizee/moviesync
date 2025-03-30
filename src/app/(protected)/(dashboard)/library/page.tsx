@@ -10,12 +10,14 @@ export default async function DashboardPage() {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    redirect("/login?callbackUrl=/dashboard");
+    redirect("/login?callbackUrl=/library");
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Your Dashboard</h1>
+      <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-6">
+        Your Library
+      </h1>
       <DashboardTabs />
     </div>
   );

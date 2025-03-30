@@ -10,9 +10,16 @@ export default async function FavoritesPage() {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    redirect("/login?callbackUrl=/dashboard/favorites");
+    redirect("/login?callbackUrl=/favorites");
   }
 
-  return <FavoriteMovies />;
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-6">
+        Your Favourites
+      </h1>
+      <FavoriteMovies />
+    </div>
+  );
 }
 

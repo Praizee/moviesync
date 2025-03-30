@@ -6,6 +6,7 @@ import { Pagination } from "@/components/pagination";
 import { Suspense } from "react";
 import Link from "next/link";
 import { GridSkeleton } from "@/components/grid-skeleton";
+import { Movie, TVShow } from "@/lib/types";
 
 interface PopularPageProps {
   searchParams: {
@@ -26,10 +27,10 @@ async function PopularContent({ type, page }: { type: string; page: number }) {
         <>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
             {isMovies
-              ? data.results.map((movie: any) => (
+              ? data.results.map((movie: Movie) => (
                   <MovieCard key={movie.id} movie={movie} />
                 ))
-              : data.results.map((show: any) => (
+              : data.results.map((show: TVShow) => (
                   <TVShowCard key={show.id} show={show} />
                 ))}
           </div>
