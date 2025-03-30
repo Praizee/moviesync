@@ -1,17 +1,16 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookmarkedMovies } from "@/components/bookmarked-movies";
 import { FavoriteMovies } from "@/components/favorite-movies";
 
 export function DashboardTabs() {
   const pathname = usePathname();
-  const router = useRouter();
+  // const router = useRouter();
 
-  const isBookmarksTab =
-    pathname === "/dashboard" || pathname === "/dashboard/bookmarks";
-  const isFavoritesTab = pathname === "/dashboard/favorites";
+  const isBookmarksTab = pathname === "/library" || pathname === "/bookmarks";
+  const isFavoritesTab = pathname === "/favorites";
 
   const activeTab = isBookmarksTab
     ? "bookmarks"

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Film, Search, User, Bookmark, Heart } from "lucide-react";
+import { Film, Search, User, Bookmark, Heart, Library } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useSupabase } from "@/components/supabase-provider";
@@ -188,7 +188,7 @@ export function Navbar() {
                       href="/library"
                       className="cursor-pointer w-full flex items-center"
                     >
-                      <Bookmark className="mr-2 h-4 w-4" />
+                      <Library className="mr-2 h-4 w-4" />
                       <span>Library</span>
                     </Link>
                   </DropdownMenuItem>

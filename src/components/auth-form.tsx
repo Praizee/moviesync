@@ -47,7 +47,7 @@ interface AuthFormProps {
 
 export function AuthForm({
   mode = "login",
-  callbackUrl = "/dashboard",
+  callbackUrl = "/library",
 }: AuthFormProps) {
   const { supabase } = useSupabase();
   const router = useRouter();

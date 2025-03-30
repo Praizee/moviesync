@@ -1,15 +1,15 @@
-import { Suspense } from "react"
-import { SearchResults } from "@/components/search-results"
-import { SearchForm } from "@/components/search-form"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Suspense } from "react";
+import { SearchResults } from "@/components/search-results";
+import { SearchForm } from "@/components/search-form";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SearchPage({
   searchParams,
 }: {
-  searchParams: { query?: string; page?: string }
+  searchParams: { query?: string; page?: string };
 }) {
-  const query = searchParams.query || ""
-  const page = Number(searchParams.page) || 1
+  const query = searchParams.query || "";
+  const page = Number(searchParams.page) || 1;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -18,7 +18,9 @@ export default function SearchPage({
 
       {query ? (
         <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-4">Results for &quot;{query}&quot;</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Results for &quot;{query}&quot;
+          </h2>
           <Suspense fallback={<SearchSkeleton />}>
             <SearchResults query={query} page={page} />
           </Suspense>
@@ -29,7 +31,7 @@ export default function SearchPage({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function SearchSkeleton() {
@@ -43,6 +45,6 @@ function SearchSkeleton() {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
