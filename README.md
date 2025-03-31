@@ -62,10 +62,10 @@
 3. **Set up environment variables:**
    Create a `.env.local` file in the root directory and add:
    ```env
-   NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key
-   NEXT_PUBLIC_AUTH_PROVIDER=supabase
+   TMDB_API_KEY=your_tmdb_api_key
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
    ```
 4. **Run the development server:**
    ```sh
