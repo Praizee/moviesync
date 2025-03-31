@@ -39,7 +39,7 @@ export function Pagination({
   const pageRange = getPageRange();
 
   return (
-    <div className="flex items-center justify-center gap-1 mt-8">
+    <div className="flex items-center justify-center min-[390px]:gap-1 gap-8 mt-8">
       <Button
         variant="outline"
         size="icon"
@@ -60,42 +60,45 @@ export function Pagination({
         )}
       </Button>
 
-      {pageRange[0] > 1 && (
-        <>
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`${baseUrl}?page=1`}>1</Link>
-          </Button>
-          {pageRange[0] > 2 && (
-            <span className="px-2 text-muted-foreground">...</span>
-          )}
-        </>
-      )}
+      {/* hidden sm:block */}
+      <div className="hidden min-[390px]:flex items-center justify-center gap-1">
+        {pageRange[0] > 1 && (
+          <>
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`${baseUrl}?page=1`}>1</Link>
+            </Button>
+            {pageRange[0] > 2 && (
+              <span className="px-2 text-muted-foreground">...</span>
+            )}
+          </>
+        )}
 
-      {pageRange.map((page) => (
-        <Button
-          key={page}
-          variant={currentPage === page ? "default" : "outline"}
-          size="sm"
-          asChild={currentPage !== page}
-        >
-          {currentPage !== page ? (
-            <Link href={`${baseUrl}?page=${page}`}>{page}</Link>
-          ) : (
-            <span>{page}</span>
-          )}
-        </Button>
-      ))}
-
-      {pageRange[pageRange.length - 1] < maxPages && (
-        <>
-          {pageRange[pageRange.length - 1] < maxPages - 1 && (
-            <span className="px-2 text-muted-foreground">...</span>
-          )}
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`${baseUrl}?page=${maxPages}`}>{maxPages}</Link>
+        {pageRange.map((page) => (
+          <Button
+            key={page}
+            variant={currentPage === page ? "default" : "outline"}
+            size="sm"
+            asChild={currentPage !== page}
+          >
+            {currentPage !== page ? (
+              <Link href={`${baseUrl}?page=${page}`}>{page}</Link>
+            ) : (
+              <span>{page}</span>
+            )}
           </Button>
-        </>
-      )}
+        ))}
+
+        {pageRange[pageRange.length - 1] < maxPages && (
+          <>
+            {pageRange[pageRange.length - 1] < maxPages - 1 && (
+              <span className="px-2 text-muted-foreground">...</span>
+            )}
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`${baseUrl}?page=${maxPages}`}>{maxPages}</Link>
+            </Button>
+          </>
+        )}
+      </div>
 
       <Button
         variant="outline"

@@ -61,7 +61,9 @@ export default async function TopRatedPage({
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Top Rated</h1>
+      <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-6">
+        Top Rated
+      </h1>
 
       <Tabs defaultValue={type} className="w-full">
         <TabsList className="grid w-full max-w-md grid-cols-2 mb-6">

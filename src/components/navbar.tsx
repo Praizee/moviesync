@@ -2,7 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Film, Search, User, Bookmark, Heart, Library } from "lucide-react";
+import {
+  Film,
+  Search,
+  User,
+  Bookmark,
+  Heart,
+  Library,
+  LogIn,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useSupabase } from "@/components/supabase-provider";
@@ -53,7 +61,7 @@ export function Navbar() {
           <div className="flex items-center gap-6 w-full">
             <Link href="/" className="flex items-center gap-2">
               <Film className="size-6" />
-              <span className="text-xl font-bold">MovieSync</span>
+              <span className="text-base sm:text-xl font-bold">MovieSync</span>
             </Link>
 
             <nav className="hidden md:flex items-center gap-6 w-full pl-8">
@@ -133,10 +141,10 @@ export function Navbar() {
             </nav>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center sm:gap-2">
             <Link href="/search" className="md:hidden">
               <Button variant="ghost" size="icon">
-                <Search className="h-5 w-5" />
+                <Search className="size-5" />
                 <span className="sr-only">Search</span>
               </Button>
             </Link>
@@ -216,9 +224,20 @@ export function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button asChild>
-                <Link href="/login">Sign In</Link>
-              </Button>
+              <div>
+                {/* Show "Sign In" text button on screens above 250px */}
+                <Button asChild className="hidden min-[301px]:block">
+                  <Link href="/login">Sign In</Link>
+                </Button>
+
+                {/* Show icon button on screens 250px and below */}
+                <Link href="/login" className="block min-[301px]:hidden">
+                  <Button variant="ghost" size="icon">
+                    <LogIn className="size-5" />
+                    <span className="sr-only">Sign In</span>
+                  </Button>
+                </Link>
+              </div>
             )}
           </div>
         </div>

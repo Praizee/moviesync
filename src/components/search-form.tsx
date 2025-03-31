@@ -32,9 +32,9 @@ export function SearchForm({ initialQuery = "" }: SearchFormProps) {
         onChange={(e) => setQuery(e.target.value)}
         className="flex-1"
       />
-      <Button type="submit">
-        <Search className="mr-2 h-4 w-4" />
-        Search
+      <Button type="submit" className="flex gap-2 items-center">
+        <Search className="size-4" />
+        <span className="hidden sm:block">Search</span>
       </Button>
     </form>
   );

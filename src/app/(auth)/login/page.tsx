@@ -19,7 +19,7 @@ export default async function LoginPage({
 
   return (
     <div className="container max-w-md mx-auto px-4 py-16">
-      <h1 className="text-3xl font-bold text-center mb-8">
+      <h1 className="text-2xl lg:text-3xl font-bold text-center mb-8">
         Sign In to MovieSync
       </h1>
       <AuthForm callbackUrl={searchParams.callbackUrl} />

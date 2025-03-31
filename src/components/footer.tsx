@@ -9,7 +9,7 @@ export function Footer() {
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <Film className="h-6 w-6" />
-              <span className="text-xl font-bold">MovieSync</span>
+              <span className="text-base sm:text-xl font-bold">MovieSync</span>
             </Link>
             <p className="text-sm text-muted-foreground">
               Browse, bookmark, and favorite movies across all your devices.

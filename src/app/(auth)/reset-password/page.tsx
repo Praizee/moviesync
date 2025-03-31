@@ -101,7 +101,7 @@ export default function ResetPasswordPage() {
     <div className="container max-w-md mx-auto px-4 py-16">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl text-center">
+          <CardTitle className="text-2xl xl:text-3xl text-center">
             Reset Your Password
           </CardTitle>
           <CardDescription className="text-center">
