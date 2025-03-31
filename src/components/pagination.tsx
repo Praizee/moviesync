@@ -38,6 +38,17 @@ export function Pagination({
 
   const pageRange = getPageRange();
 
+  // Parse the baseUrl to handle query parameters correctly
+  const [path, existingQuery] = baseUrl.split("?");
+  const queryParams = new URLSearchParams(existingQuery || "");
+
+  // Generate the correct URL with query parameters
+  const getPageUrl = (page: number) => {
+    const params = new URLSearchParams(queryParams);
+    params.set("page", page.toString());
+    return `${path}?${params.toString()}`;
+  };
+
   return (
     <div className="flex items-center justify-center min-[390px]:gap-1 gap-8 mt-8">
       <Button
@@ -47,10 +58,7 @@ export function Pagination({
         asChild={currentPage > 1}
       >
         {currentPage > 1 ? (
-          <Link
-            href={`${baseUrl}?page=${currentPage - 1}`}
-            aria-label="Previous page"
-          >
+          <Link href={getPageUrl(currentPage - 1)} aria-label="Previous page">
             <ChevronLeft className="h-4 w-4" />
           </Link>
         ) : (
@@ -60,12 +68,11 @@ export function Pagination({
         )}
       </Button>
 
-      {/* hidden sm:block */}
       <div className="hidden min-[390px]:flex items-center justify-center gap-1">
         {pageRange[0] > 1 && (
           <>
             <Button variant="outline" size="sm" asChild>
-              <Link href={`${baseUrl}?page=1`}>1</Link>
+              <Link href={getPageUrl(1)}>1</Link>
             </Button>
             {pageRange[0] > 2 && (
               <span className="px-2 text-muted-foreground">...</span>
@@ -81,7 +88,7 @@ export function Pagination({
             asChild={currentPage !== page}
           >
             {currentPage !== page ? (
-              <Link href={`${baseUrl}?page=${page}`}>{page}</Link>
+              <Link href={getPageUrl(page)}>{page}</Link>
             ) : (
               <span>{page}</span>
             )}
@@ -94,7 +101,7 @@ export function Pagination({
               <span className="px-2 text-muted-foreground">...</span>
             )}
             <Button variant="outline" size="sm" asChild>
-              <Link href={`${baseUrl}?page=${maxPages}`}>{maxPages}</Link>
+              <Link href={getPageUrl(maxPages)}>{maxPages}</Link>
             </Button>
           </>
         )}
@@ -107,10 +114,7 @@ export function Pagination({
         asChild={currentPage < maxPages}
       >
         {currentPage < maxPages ? (
-          <Link
-            href={`${baseUrl}?page=${currentPage + 1}`}
-            aria-label="Next page"
-          >
+          <Link href={getPageUrl(currentPage + 1)} aria-label="Next page">
             <ChevronRight className="h-4 w-4" />
           </Link>
         ) : (
