@@ -4,6 +4,7 @@ import { MovieCard } from "@/components/movie-card";
 import { TVShowCard } from "@/components/tv-show-card";
 import { Pagination } from "@/components/pagination";
 import { Movie, TVShow } from "@/lib/types";
+import Link from "next/link";
 
 interface TrendingPageProps {
   searchParams: {
@@ -31,10 +32,10 @@ export default async function TrendingPage({
         <Tabs defaultValue={type} className="w-full">
           <TabsList className="grid w-full max-w-md grid-cols-2 mb-6">
             <TabsTrigger value="movies" asChild>
-              <a href="/trending?type=movies">Movies</a>
+              <Link href="/trending?type=movies">Movies</Link>
             </TabsTrigger>
             <TabsTrigger value="tv" asChild>
-              <a href="/trending?type=tv">TV Shows</a>
+              <Link href="/trending?type=tv">TV Shows</Link>
             </TabsTrigger>
           </TabsList>
 

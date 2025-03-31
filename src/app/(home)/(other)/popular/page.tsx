@@ -4,6 +4,7 @@ import { MovieCard } from "@/components/movie-card";
 import { TVShowCard } from "@/components/tv-show-card";
 import { Pagination } from "@/components/pagination";
 import { Movie, TVShow } from "@/lib/types";
+import Link from "next/link";
 
 interface PopularPageProps {
   searchParams: {
@@ -30,10 +31,10 @@ export default async function PopularPage({ searchParams }: PopularPageProps) {
         <Tabs defaultValue={type} className="w-full">
           <TabsList className="grid w-full max-w-md grid-cols-2 mb-6">
             <TabsTrigger value="movies" asChild>
-              <a href="/popular?type=movies">Movies</a>
+              <Link href="/popular?type=movies">Movies</Link>
             </TabsTrigger>
             <TabsTrigger value="tv" asChild>
-              <a href="/popular?type=tv">TV Shows</a>
+              <Link href="/popular?type=tv">TV Shows</Link>
             </TabsTrigger>
           </TabsList>
 
