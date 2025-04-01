@@ -242,7 +242,7 @@ export function HeroCarousel({ movies, movieDetails }: HeroCarouselProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="h-12 w-12 rounded-full bg-black/20 text-white hover:bg-black/40 ml-4"
+          className="h-12 w-12 rounded-full bg-black/20 text-white hover:bg-black/40 ml-4 cursor-pointer"
           onClick={handlePrevious}
         >
           <ChevronLeft className="h-6 w-6" />
@@ -253,7 +253,7 @@ export function HeroCarousel({ movies, movieDetails }: HeroCarouselProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="h-12 w-12 rounded-full bg-black/20 text-white hover:bg-black/40 mr-4"
+          className="h-12 w-12 rounded-full bg-black/20 text-white hover:bg-black/40 mr-4 cursor-pointer"
           onClick={handleNext}
         >
           <ChevronRight className="h-6 w-6" />
