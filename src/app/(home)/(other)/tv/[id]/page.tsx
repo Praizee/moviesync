@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getTVShowDetails } from "@/lib/tmdb";
 import { MovieTrailer } from "@/components/movie-trailer";
+import { TVShowActions } from "@/components/tv-show-actions";
 import { AuthCheck } from "@/components/auth-check";
 import { formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,6 @@ export async function generateMetadata({
     };
   } catch (error) {
     console.error("Error fetching show details:", error);
-
     return {
       title: "TV Show - MovieSync",
       description: "View TV show details",
@@ -71,6 +71,9 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
                   </span>
                 </div>
               )}
+            </div>
+            <div className="mt-4">
+              <TVShowActions showId={params.id} showData={show} />
             </div>
           </div>
 
@@ -155,6 +158,8 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
                                 alt={person.name}
                                 fill
                                 className="object-cover"
+                                quality={90}
+                                priority
                               />
                             ) : (
                               <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -181,7 +186,6 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
     );
   } catch (error) {
     console.error(error);
-
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-bold mb-4">

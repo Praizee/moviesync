@@ -5,14 +5,14 @@ import { Bookmark, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabase } from "@/components/supabase-provider";
-import type { Movie } from "@/lib/types";
+import type { TVShow } from "@/lib/types";
 
-interface MovieActionsProps {
-  movieId: string;
-  movieData: Movie;
+interface TVShowActionsProps {
+  showId: string;
+  showData: TVShow;
 }
 
-export function MovieActions({ movieId, movieData }: MovieActionsProps) {
+export function TVShowActions({ showId, showData }: TVShowActionsProps) {
   const { supabase, session } = useSupabase();
   const { toast } = useToast();
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -27,40 +27,39 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
       }
 
       try {
-        // Check if movie is bookmarked
+        // Check if show is bookmarked
         const { data: bookmarkData } = await supabase
           .from("bookmarks")
           .select("id")
           .eq("user_id", session.user.id)
-          .eq("movie_id", movieId)
+          .eq("show_id", showId)
           .single();
 
         setIsBookmarked(!!bookmarkData);
 
-        // Check if movie is favorited
+        // Check if show is favorited
         const { data: favoriteData } = await supabase
           .from("favorites")
           .select("id")
           .eq("user_id", session.user.id)
-          .eq("movie_id", movieId)
+          .eq("show_id", showId)
           .single();
 
         setIsFavorite(!!favoriteData);
       } catch (error) {
         console.error(error);
-        // Ignore errors (they'll occur if the movie isn't bookmarked/favorited)
       } finally {
         setIsLoading(false);
       }
     }
 
     checkUserActions();
-  }, [session, supabase, movieId]);
+  }, [session, supabase, showId]);
 
   const handleBookmark = async () => {
     if (!session) {
       toast.error("Sign in required", {
-        description: "Please sign in to bookmark movies",
+        description: "Please sign in to bookmark shows",
       });
       return;
     }
@@ -68,12 +67,12 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
     try {
       if (isBookmarked) {
         // Remove bookmark
-        await fetch(`/api/user/bookmarks?movieId=${movieId}`, {
+        await fetch(`/api/user/bookmarks?showId=${showId}`, {
           method: "DELETE",
         });
 
         toast.success("Bookmark removed", {
-          description: `"${movieData.title}" has been removed from your bookmarks`,
+          description: `"${showData.name}" has been removed from your bookmarks`,
         });
       } else {
         // Add bookmark
@@ -82,11 +81,11 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ movieId, movieData }),
+          body: JSON.stringify({ showId, showData }),
         });
 
-        toast.success("Movie bookmarked", {
-          description: `"${movieData.title}" has been added to your bookmarks`,
+        toast.success("Show bookmarked", {
+          description: `"${showData.name}" has been added to your bookmarks`,
         });
       }
 
@@ -102,7 +101,7 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
   const handleFavorite = async () => {
     if (!session) {
       toast.error("Sign in required", {
-        description: "Please sign in to favorite movies",
+        description: "Please sign in to favorite shows",
       });
       return;
     }
@@ -110,12 +109,12 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
     try {
       if (isFavorite) {
         // Remove favorite
-        await fetch(`/api/user/favorites?movieId=${movieId}`, {
+        await fetch(`/api/user/favorites?showId=${showId}`, {
           method: "DELETE",
         });
 
         toast.success("Favorite removed", {
-          description: `"${movieData.title}" has been removed from your favorites`,
+          description: `"${showData.name}" has been removed from your favorites`,
         });
       } else {
         // Add favorite
@@ -124,11 +123,11 @@ export function MovieActions({ movieId, movieData }: MovieActionsProps) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ movieId, movieData }),
+          body: JSON.stringify({ showId, showData }),
         });
 
-        toast.success("Movie favorited", {
-          description: `"${movieData.title}" has been added to your favorites`,
+        toast.success("Show favorited", {
+          description: `"${showData.name}" has been added to your favorites`,
         });
       }
 
