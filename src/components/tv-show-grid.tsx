@@ -1,5 +1,7 @@
 import { TVShowCard } from "@/components/tv-show-card";
 import { getTVShows } from "@/lib/tmdb";
+import { MovieGridSkeleton } from "@/components/skeletons/movie-grid-skeleton";
+import { Suspense } from "react";
 import { TVShow } from "@/lib/types";
 
 interface TVShowGridProps {
@@ -7,7 +9,21 @@ interface TVShowGridProps {
   page?: number;
 }
 
-export async function TVShowGrid({ type, page = 1 }: TVShowGridProps) {
+export function TVShowGrid({ type, page = 1 }: TVShowGridProps) {
+  return (
+    <Suspense fallback={<MovieGridSkeleton />}>
+      <TVShowGridContent type={type} page={page} />
+    </Suspense>
+  );
+}
+
+async function TVShowGridContent({
+  type,
+  page,
+}: {
+  type: string;
+  page: number;
+}) {
   try {
     const shows = await getTVShows(type, page);
 

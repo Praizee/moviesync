@@ -1,5 +1,7 @@
 import { MovieCard } from "@/components/movie-card";
 import { getMovies } from "@/lib/tmdb";
+import { MovieGridSkeleton } from "@/components/skeletons/movie-grid-skeleton";
+import { Suspense } from "react";
 import { Movie } from "@/lib/types";
 
 interface MovieGridProps {
@@ -7,7 +9,21 @@ interface MovieGridProps {
   page?: number;
 }
 
-export async function MovieGrid({ type, page = 1 }: MovieGridProps) {
+export function MovieGrid({ type, page = 1 }: MovieGridProps) {
+  return (
+    <Suspense fallback={<MovieGridSkeleton />}>
+      <MovieGridContent type={type} page={page} />
+    </Suspense>
+  );
+}
+
+async function MovieGridContent({
+  type,
+  page,
+}: {
+  type: string;
+  page: number;
+}) {
   try {
     const movies = await getMovies(type, page);
 

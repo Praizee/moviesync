@@ -5,22 +5,16 @@ import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import type { VideoItem } from "@/lib/types";
 import Image from "next/image";
 
-interface Video {
-  id: string;
-  key: string;
-  name: string;
-  site: string;
-  type: string;
-}
-
 interface MovieTrailerProps {
-  videos: Video[];
+  videos: VideoItem[];
 }
 
 export function MovieTrailer({ videos }: MovieTrailerProps) {
   const [activeVideo, setActiveVideo] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   // Filter for YouTube trailers and teasers
   const filteredVideos = videos.filter(
@@ -47,40 +41,41 @@ export function MovieTrailer({ videos }: MovieTrailerProps) {
 
   return (
     <div className="space-y-4">
-      <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
-        <Dialog>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
           <DialogTrigger asChild>
             <Button
               variant="outline"
               size="icon"
               className="absolute inset-0 flex h-full w-full items-center justify-center rounded-none bg-black/30 hover:bg-black/40"
+              onClick={() => setIsOpen(true)}
             >
               <Play className="h-16 w-16 text-white" />
               <span className="sr-only">Play trailer</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[800px] p-0">
-            <div className="aspect-video">
-              <iframe
-                width="100%"
-                height="100%"
-                src={`https://www.youtube.com/embed/${filteredVideos[activeVideo].key}`}
-                title={filteredVideos[activeVideo].name}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-          </DialogContent>
-        </Dialog>
-        <Image
-          src={`https://img.youtube.com/vi/${filteredVideos[activeVideo].key}/maxresdefault.jpg`}
-          alt={filteredVideos[activeVideo].name}
-          className="h-full w-full object-cover"
-          quality={90}
-          priority
-          fill
-        />
-      </div>
+          <Image
+            src={`https://img.youtube.com/vi/${filteredVideos[activeVideo].key}/maxresdefault.jpg`}
+            alt={filteredVideos[activeVideo].name}
+            className="h-full w-full object-cover"
+            fill
+            priority
+          />
+        </div>
+
+        <DialogContent className="sm:max-w-[800px] p-0">
+          <div className="aspect-video">
+            <iframe
+              width="100%"
+              height="100%"
+              src={`https://www.youtube.com/embed/${filteredVideos[activeVideo].key}?autoplay=1`}
+              title={filteredVideos[activeVideo].name}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {filteredVideos.length > 1 && (
         <div className="flex items-center justify-between">
@@ -88,7 +83,7 @@ export function MovieTrailer({ videos }: MovieTrailerProps) {
             <ChevronLeft className="h-4 w-4" />
             <span className="sr-only">Previous trailer</span>
           </Button>
-          <div className="hidden sm:flex items-center gap-2">
+          <div className="flex items-center gap-2">
             {filteredVideos.map((_, index) => (
               <button
                 key={index}

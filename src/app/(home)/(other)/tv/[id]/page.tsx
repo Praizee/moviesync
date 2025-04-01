@@ -133,14 +133,16 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
                   <p className="text-muted-foreground">{show.overview}</p>
                 </div>
 
-                {show.videos?.results?.length > 0 && (
-                  <div className="mb-6">
-                    <h2 className="text-2xl font-semibold mb-4">Trailer</h2>
-                    <MovieTrailer videos={show.videos.results} />
-                  </div>
-                )}
+                {show.videos &&
+                  show.videos.results &&
+                  show.videos.results.length > 0 && (
+                    <div className="mb-6">
+                      <h2 className="text-2xl font-semibold mb-4">Trailer</h2>
+                      <MovieTrailer videos={show?.videos.results} />
+                    </div>
+                  )}
 
-                {show.credits?.cast?.length > 0 && (
+                {show.credits?.cast && show.credits.cast.length > 0 && (
                   <div className="mb-6">
                     <h2 className="text-2xl font-semibold mb-4">Cast</h2>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">

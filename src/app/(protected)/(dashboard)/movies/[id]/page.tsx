@@ -24,8 +24,6 @@ export async function generateMetadata({
       description: movie.overview,
     };
   } catch (error) {
-    console.error("Error fetching movie details:", error);
-
     return {
       title: "Movie - MovieSync",
       description: "View movie details",
@@ -40,7 +38,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="md:col-span-1 flex flex-col gap-4">
+          <div className="md:col-span-1">
             <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg">
               {movie.poster_path ? (
                 <Image
@@ -50,7 +48,6 @@ export default async function MoviePage({ params }: MoviePageProps) {
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 33vw"
                   priority
-                  quality={90}
                 />
               ) : (
                 <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -60,7 +57,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
                 </div>
               )}
             </div>
-            <div className="">
+            <div className="mt-4">
               <MovieActions movieId={params.id} movieData={movie} />
             </div>
           </div>
@@ -125,7 +122,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
                   movie.videos.results.length > 0 && (
                     <div className="mb-6">
                       <h2 className="text-2xl font-semibold mb-4">Trailer</h2>
-                      <MovieTrailer videos={movie.videos.results} />
+                      <MovieTrailer videos={movie?.videos?.results} />
                     </div>
                   )}
               </>
@@ -135,16 +132,14 @@ export default async function MoviePage({ params }: MoviePageProps) {
       </div>
     );
   } catch (error) {
-    console.error(error);
-
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-bold mb-4">
           Unable to load movie details
         </h1>
         <p className="text-muted-foreground mb-8">
-          We&apos;re having trouble loading this movie&apos;s information. This
-          could be due to a temporary issue.
+          We're having trouble loading this movie's information. This could be
+          due to a temporary issue.
         </p>
         <Button asChild>
           <Link href="/">Return to Home</Link>
