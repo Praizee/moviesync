@@ -1,6 +1,6 @@
 export function HeroSkeleton() {
   return (
-    <div className="relative overflow-hidden rounded-xl bg-muted animate-pulse">
+    <div className="relative overflow-hidden bg-muted animate-pulse h-[500px] md:h-[600px]">
       <div className="aspect-[21/9] md:aspect-[3/1]">
         <div className="absolute inset-0 bg-gradient-to-r from-muted-foreground/10 via-muted-foreground/5 to-transparent" />
         <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12">
@@ -24,3 +24,4 @@ export function HeroSkeleton() {
     </div>
   );
 }
+

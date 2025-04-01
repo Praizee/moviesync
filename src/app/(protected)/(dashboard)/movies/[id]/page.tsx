@@ -24,6 +24,7 @@ export async function generateMetadata({
       description: movie.overview,
     };
   } catch (error) {
+    console.error(error);
     return {
       title: "Movie - MovieSync",
       description: "View movie details",
@@ -132,14 +133,15 @@ export default async function MoviePage({ params }: MoviePageProps) {
       </div>
     );
   } catch (error) {
+    console.error(error);
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-bold mb-4">
           Unable to load movie details
         </h1>
         <p className="text-muted-foreground mb-8">
-          We're having trouble loading this movie's information. This could be
-          due to a temporary issue.
+          We&apos;re having trouble loading this movie&apos;s information. This
+          could be due to a temporary issue.
         </p>
         <Button asChild>
           <Link href="/">Return to Home</Link>
