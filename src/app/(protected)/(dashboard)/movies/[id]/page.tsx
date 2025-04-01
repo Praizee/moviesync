@@ -40,14 +40,14 @@ export default async function MoviePage({ params }: MoviePageProps) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="md:col-span-1 flex flex-col gap-4">
-            <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg">
+          <div className="md:col-span-1">
+            <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg group">
               {movie.poster_path ? (
                 <Image
                   src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                   alt={movie.title}
                   fill
-                  className="object-cover"
+                  className="object-cover duration-300 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 33vw"
                   priority
                   quality={90}
