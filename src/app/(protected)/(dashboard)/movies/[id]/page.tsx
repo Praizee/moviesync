@@ -6,6 +6,7 @@ import { MovieTrailer } from "@/components/movie-trailer";
 import { AuthCheck } from "@/components/auth-check";
 import { formatDate, formatRuntime, formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Star } from "lucide-react";
 import Link from "next/link";
 
 interface MoviePageProps {
@@ -24,8 +25,7 @@ export async function generateMetadata({
       description: movie.overview,
     };
   } catch (error) {
-    console.error("Error fetching movie details:", error);
-
+    console.error(error);
     return {
       title: "Movie - MovieSync",
       description: "View movie details",
@@ -41,7 +41,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-1">
-            <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg group">
+            <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg">
               {movie.poster_path ? (
                 <Image
                   src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -50,7 +50,6 @@ export default async function MoviePage({ params }: MoviePageProps) {
                   className="object-cover duration-300 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 33vw"
                   priority
-                  quality={90}
                 />
               ) : (
                 <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -60,7 +59,20 @@ export default async function MoviePage({ params }: MoviePageProps) {
                 </div>
               )}
             </div>
-            <div className="">
+            <div className="mt-4 flex items-center">
+              {movie.vote_average !== undefined && (
+                <div className="flex items-center">
+                  <Star className="h-5 w-5 mr-1 text-yellow-400 fill-yellow-400" />
+                  <span className="font-medium">
+                    {movie.vote_average.toFixed(1)}
+                  </span>
+                  <span className="text-muted-foreground ml-1">
+                    ({movie.vote_count} votes)
+                  </span>
+                </div>
+              )}
+            </div>
+            <div className="mt-4">
               <MovieActions movieId={params.id} movieData={movie} />
             </div>
           </div>
@@ -125,9 +137,41 @@ export default async function MoviePage({ params }: MoviePageProps) {
                   movie.videos.results.length > 0 && (
                     <div className="mb-6">
                       <h2 className="text-2xl font-semibold mb-4">Trailer</h2>
-                      <MovieTrailer videos={movie.videos.results} />
+                      <MovieTrailer videos={movie?.videos?.results} />
                     </div>
                   )}
+
+                {movie.credits?.cast && movie.credits.cast.length > 0 && (
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-semibold mb-4">Cast</h2>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                      {movie.credits.cast.slice(0, 8).map((person) => (
+                        <div key={person.id} className="text-center">
+                          <div className="aspect-square relative overflow-hidden rounded-lg mb-2">
+                            {person.profile_path ? (
+                              <Image
+                                src={`https://image.tmdb.org/t/p/w200${person.profile_path}`}
+                                alt={person.name}
+                                fill
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-muted flex items-center justify-center">
+                                <span className="text-muted-foreground text-xs">
+                                  No image
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <p className="font-medium text-sm">{person.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {person.character}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </>
             </AuthCheck>
           </div>
@@ -136,7 +180,6 @@ export default async function MoviePage({ params }: MoviePageProps) {
     );
   } catch (error) {
     console.error(error);
-
     return (
       <div className="container mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-bold mb-4">

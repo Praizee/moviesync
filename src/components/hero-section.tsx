@@ -1,52 +1,53 @@
 import { getMovies } from "@/lib/tmdb";
-import { HeroCarousel } from "./hero-carousel";
-import { Button } from "./ui/button";
-import Link from "next/link";
-import { useToast } from "@/hooks/use-toast";
+import { HeroCarousel } from "@/components/hero-carousel";
+import { HeroSkeleton } from "@/components/skeletons/hero-skeleton";
+import { Suspense } from "react";
+import { Movie } from "@/lib/types";
 
 export async function HeroSection() {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { toast } = useToast();
+  return (
+    <Suspense fallback={<HeroSkeleton />}>
+      <HeroContent />
+    </Suspense>
+  );
+}
+
+async function HeroContent() {
   try {
+    // Fetch popular movies
     const movies = await getMovies("popular", 1);
 
-    // Check if we have results
     if (!movies.results || movies.results.length === 0) {
-      return <DefaultHero />;
+      return <HeroSkeleton />;
     }
 
     // Get first 20 movies
     const featuredMovies = movies.results.slice(0, 20);
 
-    return <HeroCarousel movies={featuredMovies} />;
-  } catch (error: unknown) {
-    toast.error("Error", {
-      description:
-        error instanceof Error
-          ? error.message
-          : "Something went wrong. Please try again.",
-    });
-    return <DefaultHero />;
-  }
-}
+    // Fetch additional details for each featured movie
+    const detailsPromises = featuredMovies.map(async (movie: Movie) => {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${process.env.TMDB_API_KEY}&append_to_response=credits,videos`,
+          { next: { revalidate: 3600 } }
+        );
 
-function DefaultHero() {
-  return (
-    <div className="relative overflow-hidden rounded-xl bg-muted">
-      <div className="aspect-[21/9] md:aspect-[3/1] flex items-center justify-center">
-        <div className="p-6 md:p-12 text-center">
-          <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4">
-            Welcome to MovieSync
-          </h1>
-          <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6">
-            Discover, bookmark, and favorite your movies
-          </p>
-          <Button asChild size="lg">
-            <Link href="/search">Search Movies</Link>
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
+        if (response.ok) {
+          return await response.json();
+        }
+        return null;
+      } catch (error) {
+        console.error(`Error fetching details for movie ${movie.id}:`, error);
+        return null;
+      }
+    });
+
+    const movieDetails = await Promise.all(detailsPromises);
+
+    return <HeroCarousel movies={featuredMovies} movieDetails={movieDetails} />;
+  } catch (error) {
+    console.error("Error in HeroSection:", error);
+    return <HeroSkeleton />;
+  }
 }
 

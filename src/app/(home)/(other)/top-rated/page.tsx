@@ -4,6 +4,7 @@ import { MovieCard } from "@/components/movie-card";
 import { TVShowCard } from "@/components/tv-show-card";
 import { Pagination } from "@/components/pagination";
 import { Movie, TVShow } from "@/lib/types";
+import Link from "next/link";
 
 interface TopRatedPageProps {
   searchParams: {
@@ -27,15 +28,17 @@ export default async function TopRatedPage({
 
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Top Rated</h1>
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-6">
+          Top Rated
+        </h1>
 
         <Tabs defaultValue={type} className="w-full">
           <TabsList className="grid w-full max-w-md grid-cols-2 mb-6">
             <TabsTrigger value="movies" asChild>
-              <a href="/top-rated?type=movies">Movies</a>
+              <Link href="/top-rated?type=movies">Movies</Link>
             </TabsTrigger>
             <TabsTrigger value="tv" asChild>
-              <a href="/top-rated?type=tv">TV Shows</a>
+              <Link href="/top-rated?type=tv">TV Shows</Link>
             </TabsTrigger>
           </TabsList>
 
@@ -74,7 +77,9 @@ export default async function TopRatedPage({
     console.error("Error in TopRatedPage:", error);
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Top Rated</h1>
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-6">
+          Top Rated
+        </h1>
         <div className="text-center py-12">
           <p className="text-muted-foreground">
             Unable to load top rated content at this time. Please try again
@@ -149,7 +154,7 @@ export default async function TopRatedPage({
 
 //   return (
 //     <div className="container mx-auto px-4 py-8">
-//       <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-6">
+//       <h1 className="text-xl sm:text-2xl lg:text-3xl  font-bold mb-6">
 //         Top Rated
 //       </h1>
 
