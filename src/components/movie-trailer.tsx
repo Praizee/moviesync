@@ -62,17 +62,17 @@ export function MovieTrailer({ videos }: MovieTrailerProps) {
               <Button
                 variant="outline"
                 size="lg"
-                className="rounded-full w-16 h-16 flex items-center justify-center bg-white/20 hover:bg-white/30 border-white/40"
+                className="rounded-full w-16 h-16 flex items-center justify-center bg-white/20 hover:bg-white/30 border-white/40 cursor-pointer"
                 onClick={() => setIsOpen(true)}
               >
-                <Play className="h-8 w-8 text-white" fill="white" />
+                <Play className="size-8 text-white" fill="white" />
                 <span className="sr-only">Play trailer</span>
               </Button>
             </DialogTrigger>
           </div>
         </div>
         <DialogTitle className="sr-only">Trailer</DialogTitle>
-        <DialogContent className="sm:max-w-[800px] p-0">
+        <DialogContent className="sm:max-w-[800px] p-0 border-4 border-primary/50 overflow-hidden">
           <div className="aspect-video">
             <iframe
               width="100%"

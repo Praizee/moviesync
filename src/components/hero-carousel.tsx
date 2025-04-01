@@ -218,7 +218,7 @@ export function HeroCarousel({ movies, movieDetails }: HeroCarouselProps) {
                   </DialogTrigger>
                   <DialogTitle className="sr-only">Trailer</DialogTitle>
 
-                  <DialogContent className="sm:max-w-[800px] p-0">
+                  <DialogContent className="sm:max-w-[800px] p-0 border-4 border-primary/50 overflow-hidden">
                     <div className="aspect-video">
                       <iframe
                         width="100%"
