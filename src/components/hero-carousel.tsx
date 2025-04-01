@@ -216,7 +216,7 @@ export function HeroCarousel({ movies, movieDetails }: HeroCarouselProps) {
                       Watch Trailer
                     </Button>
                   </DialogTrigger>
-                  <DialogTitle className="sr-only">Menu</DialogTitle>
+                  <DialogTitle className="sr-only">Trailer</DialogTitle>
 
                   <DialogContent className="sm:max-w-[800px] p-0">
                     <div className="aspect-video">

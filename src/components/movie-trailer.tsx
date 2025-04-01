@@ -3,7 +3,12 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import type { VideoItem } from "@/lib/types";
 import Image from "next/image";
@@ -42,18 +47,7 @@ export function MovieTrailer({ videos }: MovieTrailerProps) {
   return (
     <div className="space-y-4">
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
-          <DialogTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="absolute inset-0 flex h-full w-full items-center justify-center rounded-none bg-black/30 hover:bg-black/40"
-              onClick={() => setIsOpen(true)}
-            >
-              <Play className="h-16 w-16 text-white" />
-              <span className="sr-only">Play trailer</span>
-            </Button>
-          </DialogTrigger>
+        <div className="relative aspect-video overflow-hidden rounded-lg bg-muted group">
           <Image
             src={`https://img.youtube.com/vi/${filteredVideos[activeVideo].key}/maxresdefault.jpg`}
             alt={filteredVideos[activeVideo].name}
@@ -61,8 +55,23 @@ export function MovieTrailer({ videos }: MovieTrailerProps) {
             fill
             priority
           />
-        </div>
 
+          {/* Play button overlay */}
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity">
+            <DialogTrigger asChild>
+              <Button
+                variant="outline"
+                size="lg"
+                className="rounded-full w-16 h-16 flex items-center justify-center bg-white/20 hover:bg-white/30 border-white/40"
+                onClick={() => setIsOpen(true)}
+              >
+                <Play className="h-8 w-8 text-white" fill="white" />
+                <span className="sr-only">Play trailer</span>
+              </Button>
+            </DialogTrigger>
+          </div>
+        </div>
+        <DialogTitle className="sr-only">Trailer</DialogTitle>
         <DialogContent className="sm:max-w-[800px] p-0">
           <div className="aspect-video">
             <iframe

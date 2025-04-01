@@ -10,7 +10,7 @@ export default function Loading() {
       <SearchForm initialQuery="" />
 
       <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-4">Loading results...</h2>
+        {/* <h2 className="text-xl font-semibold mb-4">Loading results...</h2> */}
         <MovieGridSkeleton count={20} />
       </div>
     </div>
