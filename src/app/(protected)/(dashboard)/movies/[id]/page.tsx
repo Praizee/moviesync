@@ -3,11 +3,13 @@ import Image from "next/image";
 import { getMovieDetails } from "@/lib/tmdb";
 import { MovieActions } from "@/components/movie-actions";
 import { MovieTrailer } from "@/components/movie-trailer";
+import { SimilarMovies } from "@/components/similar-movies";
 import { AuthCheck } from "@/components/auth-check";
 import { formatDate, formatRuntime, formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import Link from "next/link";
+import { BackButton } from "@/components/back-button";
 
 interface MoviePageProps {
   params: {
@@ -39,6 +41,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
 
     return (
       <div className="container mx-auto px-4 py-8">
+        <BackButton />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-1">
             <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg">
@@ -59,6 +62,9 @@ export default async function MoviePage({ params }: MoviePageProps) {
                 </div>
               )}
             </div>
+            <div className="mt-4">
+              <MovieActions movieId={params.id} movieData={movie} />
+            </div>
             <div className="mt-4 flex items-center">
               {movie.vote_average !== undefined && (
                 <div className="flex items-center">
@@ -71,9 +77,6 @@ export default async function MoviePage({ params }: MoviePageProps) {
                   </span>
                 </div>
               )}
-            </div>
-            <div className="mt-4">
-              <MovieActions movieId={params.id} movieData={movie} />
             </div>
           </div>
 
@@ -172,6 +175,13 @@ export default async function MoviePage({ params }: MoviePageProps) {
                     </div>
                   </div>
                 )}
+
+                <div className="mb-6">
+                  <h2 className="text-2xl font-semibold mb-4">
+                    Similar Movies
+                  </h2>
+                  <SimilarMovies movieId={params.id} />
+                </div>
               </>
             </AuthCheck>
           </div>

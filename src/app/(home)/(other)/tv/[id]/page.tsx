@@ -4,10 +4,12 @@ import Link from "next/link";
 import { getTVShowDetails } from "@/lib/tmdb";
 import { MovieTrailer } from "@/components/movie-trailer";
 import { TVShowActions } from "@/components/tv-show-actions";
+import { SimilarTVShows } from "@/components/similar-tv-shows";
 import { AuthCheck } from "@/components/auth-check";
 import { formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
+import { BackButton } from "@/components/back-button";
 
 interface TVShowPageProps {
   params: {
@@ -39,6 +41,7 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
 
     return (
       <div className="container mx-auto px-4 py-8">
+        <BackButton />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-1">
             <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg">
@@ -59,7 +62,10 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
                 </div>
               )}
             </div>
-            <div className="mt-4 flex items-center justify-between">
+            <div className="mt-4">
+              <TVShowActions showId={params.id} showData={show} />
+            </div>
+            <div className="mt-4 flex items-center">
               {show.vote_average !== undefined && (
                 <div className="flex items-center">
                   <Star className="h-5 w-5 mr-1 text-yellow-400 fill-yellow-400" />
@@ -71,9 +77,6 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
                   </span>
                 </div>
               )}
-            </div>
-            <div className="mt-4">
-              <TVShowActions showId={params.id} showData={show} />
             </div>
           </div>
 
@@ -178,6 +181,13 @@ export default async function TVShowPage({ params }: TVShowPageProps) {
                     </div>
                   </div>
                 )}
+
+                <div className="mb-6">
+                  <h2 className="text-2xl font-semibold mb-4">
+                    Similar TV Shows
+                  </h2>
+                  <SimilarTVShows showId={params.id} />
+                </div>
               </>
             </AuthCheck>
           </div>

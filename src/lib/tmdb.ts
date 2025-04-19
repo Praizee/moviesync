@@ -89,6 +89,16 @@ export async function getTVShowDetails(id: string): Promise<TVShowDetails> {
   }
 }
 
+export async function getSimilarMovies(id: string, page = 1) {
+  const url = `${TMDB_BASE_URL}/movie/${id}/similar?api_key=${TMDB_API_KEY}&language=en-US&page=${page}`;
+  return await fetchWithErrorHandling(url, { next: { revalidate: 3600 } });
+}
+
+export async function getSimilarTVShows(id: string, page = 1) {
+  const url = `${TMDB_BASE_URL}/tv/${id}/similar?api_key=${TMDB_API_KEY}&language=en-US&page=${page}`;
+  return await fetchWithErrorHandling(url, { next: { revalidate: 3600 } });
+}
+
 export async function searchMovies(query: string, page = 1) {
   const url = `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&language=en-US&query=${encodeURIComponent(
     query

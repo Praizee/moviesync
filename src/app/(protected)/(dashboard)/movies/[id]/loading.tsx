@@ -1,8 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { BackButton } from "@/components/back-button";
 
 export default function Loading() {
   return (
     <div className="container mx-auto px-4 py-8">
+      <BackButton />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-1">
           <div className="relative aspect-[2/3] rounded-lg overflow-hidden shadow-lg">
