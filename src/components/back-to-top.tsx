@@ -30,6 +30,7 @@ const BackToTopButton = () => {
 
   return (
     <button
+      type="button"
       className={`fixed z-50 bottom-6 right-6 bg-primary hover:bg-primary/80 duration-300 transition-colors p-3 rounded-full cursor-pointer ${
         isVisible ? "opacity-100" : "opacity-0"
       } transition-opacity ease-in-out duration-300`}
